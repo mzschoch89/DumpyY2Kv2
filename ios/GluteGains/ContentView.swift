@@ -12,16 +12,33 @@ struct ContentView: View {
         let turquoise = UIColor(Y2K.turquoise)
         let pink = UIColor(Y2K.hotPink)
 
-        appearance.stackedLayoutAppearance.normal.iconColor = pink
-        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+        // Configure all layout appearances (stacked, inline, compactInline)
+        let normalAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: pink,
             .font: UIFont.systemFont(ofSize: 10, weight: .bold)
         ]
-        appearance.stackedLayoutAppearance.selected.iconColor = turquoise
-        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+        let selectedAttributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: turquoise,
             .font: UIFont.systemFont(ofSize: 10, weight: .heavy)
         ]
+
+        // Stacked (default iPhone portrait)
+        appearance.stackedLayoutAppearance.normal.iconColor = pink
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = normalAttributes
+        appearance.stackedLayoutAppearance.selected.iconColor = turquoise
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = selectedAttributes
+
+        // Inline (iPad, landscape)
+        appearance.inlineLayoutAppearance.normal.iconColor = pink
+        appearance.inlineLayoutAppearance.normal.titleTextAttributes = normalAttributes
+        appearance.inlineLayoutAppearance.selected.iconColor = turquoise
+        appearance.inlineLayoutAppearance.selected.titleTextAttributes = selectedAttributes
+
+        // Compact inline
+        appearance.compactInlineLayoutAppearance.normal.iconColor = pink
+        appearance.compactInlineLayoutAppearance.normal.titleTextAttributes = normalAttributes
+        appearance.compactInlineLayoutAppearance.selected.iconColor = turquoise
+        appearance.compactInlineLayoutAppearance.selected.titleTextAttributes = selectedAttributes
 
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
@@ -36,6 +53,7 @@ struct ContentView: View {
             }
             .tabItem {
                 Image(systemName: "sparkles")
+                    .renderingMode(.template)
                 Text("HOME")
             }
             .tag(AppTab.gym)
@@ -45,6 +63,7 @@ struct ContentView: View {
             }
             .tabItem {
                 Image(systemName: "square.grid.2x2.fill")
+                    .renderingMode(.template)
                 Text("PLANS")
             }
             .tag(AppTab.plans)
@@ -54,6 +73,7 @@ struct ContentView: View {
             }
             .tabItem {
                 Image(systemName: "camera.fill")
+                    .renderingMode(.template)
                 Text("PROGRESS")
             }
             .tag(AppTab.gains)
@@ -63,6 +83,7 @@ struct ContentView: View {
             }
             .tabItem {
                 Image(systemName: "person.fill")
+                    .renderingMode(.template)
                 Text("SOCIAL")
             }
             .tag(AppTab.social)
