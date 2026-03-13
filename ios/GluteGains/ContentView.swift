@@ -5,6 +5,30 @@ struct ContentView: View {
     @State private var selectedTab: AppTab = .gym
     @State private var showWorkout: Bool = false
 
+    init() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(Color(red: 0.98, green: 0.95, blue: 0.96))
+        let turquoise = UIColor(Y2K.turquoise)
+        let pink = UIColor(Y2K.hotPink)
+
+        appearance.stackedLayoutAppearance.normal.iconColor = pink
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+            .foregroundColor: pink,
+            .font: UIFont.systemFont(ofSize: 10, weight: .bold)
+        ]
+        appearance.stackedLayoutAppearance.selected.iconColor = turquoise
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+            .foregroundColor: turquoise,
+            .font: UIFont.systemFont(ofSize: 10, weight: .heavy)
+        ]
+
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+        UITabBar.appearance().unselectedItemTintColor = pink
+        UITabBar.appearance().tintColor = turquoise
+    }
+
     var body: some View {
         TabView(selection: $selectedTab) {
             NavigationStack {
@@ -49,35 +73,7 @@ struct ContentView: View {
         }
         .onAppear {
             viewModel.load()
-            configureTabBarAppearance()
         }
-    }
-
-    private func configureTabBarAppearance() {
-        let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(Color(red: 0.98, green: 0.95, blue: 0.96))
-        let turquoise = UIColor(Y2K.turquoise)
-        let pink = UIColor(Y2K.hotPink)
-
-        let normalItem = appearance.stackedLayoutAppearance.normal
-        normalItem.iconColor = pink
-        normalItem.titleTextAttributes = [
-            .foregroundColor: pink,
-            .font: UIFont.systemFont(ofSize: 10, weight: .bold)
-        ]
-
-        let selectedItem = appearance.stackedLayoutAppearance.selected
-        selectedItem.iconColor = turquoise
-        selectedItem.titleTextAttributes = [
-            .foregroundColor: turquoise,
-            .font: UIFont.systemFont(ofSize: 10, weight: .heavy)
-        ]
-
-        UITabBar.appearance().standardAppearance = appearance
-        UITabBar.appearance().scrollEdgeAppearance = appearance
-        UITabBar.appearance().unselectedItemTintColor = pink
-        UITabBar.appearance().tintColor = turquoise
     }
 }
 
