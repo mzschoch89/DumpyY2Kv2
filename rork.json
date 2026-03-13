@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "Glute Gains",
+      "path": "ios",
+      "framework": "swift"
+    }
+  ]
+}
