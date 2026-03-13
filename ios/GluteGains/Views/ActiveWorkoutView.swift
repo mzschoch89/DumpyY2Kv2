@@ -7,6 +7,7 @@ struct ActiveWorkoutView: View {
     @State private var selectedExerciseIndex: Int = 0
     @State private var editingWeight: [Int: String] = [:]
     @State private var editingReps: [Int: String] = [:]
+    @State private var showWarmup: Bool = true
 
     var body: some View {
         NavigationStack {
@@ -22,6 +23,21 @@ struct ActiveWorkoutView: View {
                     exerciseContent
                     Spacer(minLength: 0)
                     bottomActions
+                }
+            }
+            .sheet(isPresented: $showWarmup) {
+                warmupSheet
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
+            }
+            .onChange(of: viewModel.shouldAdvanceExercise) { _, newValue in
+                if let next = newValue {
+                    withAnimation(.snappy) {
+                        selectedExerciseIndex = next
+                        editingWeight = [:]
+                        editingReps = [:]
+                    }
+                    viewModel.shouldAdvanceExercise = nil
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -92,21 +108,34 @@ struct ActiveWorkoutView: View {
         )
     }
 
+    private func isExerciseCompleted(_ log: ExerciseLog) -> Bool {
+        log.sets.allSatisfy { $0.isCompleted }
+    }
+
     private var exerciseTabBar: some View {
         ScrollView(.horizontal) {
             HStack(spacing: 10) {
                 if let session = viewModel.activeSession {
                     ForEach(Array(session.exerciseLogs.enumerated()), id: \.element.id) { index, log in
+                        let completed = isExerciseCompleted(log)
                         Button {
                             withAnimation(.snappy) { selectedExerciseIndex = index }
                         } label: {
                             VStack(spacing: 4) {
-                                Image(systemName: log.category.icon)
-                                    .font(.caption)
+                                ZStack {
+                                    Image(systemName: log.category.icon)
+                                        .font(.caption)
+                                    if completed {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .font(.system(size: 10))
+                                            .foregroundStyle(Y2K.limeGreen)
+                                            .offset(x: 10, y: -8)
+                                    }
+                                }
                                 Text(log.category.displayName.uppercased())
                                     .font(.system(.caption2, design: .rounded, weight: .bold))
                             }
-                            .foregroundStyle(selectedExerciseIndex == index ? .white : Y2K.turquoise)
+                            .foregroundStyle(selectedExerciseIndex == index ? .white : (completed ? Y2K.limeGreen : Y2K.turquoise))
                             .padding(.horizontal, 18)
                             .padding(.vertical, 12)
                             .background {
@@ -114,6 +143,9 @@ struct ActiveWorkoutView: View {
                                     Capsule().fill(
                                         LinearGradient(colors: [Y2K.hotPink, Y2K.bubblegumPink], startPoint: .leading, endPoint: .trailing)
                                     )
+                                } else if completed {
+                                    Capsule().fill(Y2K.limeGreen.opacity(0.15))
+                                        .overlay(Capsule().strokeBorder(Y2K.limeGreen, lineWidth: 1.5))
                                 } else {
                                     Capsule().fill(.white.opacity(0.9))
                                 }
@@ -158,6 +190,8 @@ struct ActiveWorkoutView: View {
                         .foregroundStyle(.white)
                         .shadow(color: .black.opacity(0.15), radius: 3, y: 2)
                         .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(nil)
 
                     Image(systemName: log.category.icon)
                         .font(.system(size: 36))
@@ -176,7 +210,7 @@ struct ActiveWorkoutView: View {
                 SparkleDecoration(size: 14, color: .white.opacity(0.6))
                     .offset(x: 130, y: -70)
             }
-            .frame(height: 200)
+            .frame(minHeight: 200)
 
             Button {
                 viewModel.swapExercise(at: selectedExerciseIndex)
@@ -283,16 +317,79 @@ struct ActiveWorkoutView: View {
     }
 
     private var bottomActions: some View {
-        VStack(spacing: 8) {
-            Button {
-                showEndConfirmation = true
-            } label: {
-                Text("END WORKOUT EARLY")
-                    .font(.system(.caption, design: .rounded, weight: .bold))
-                    .foregroundStyle(Y2K.hotPink)
-            }
+        Button {
+            showEndConfirmation = true
+        } label: {
+            Text("END WORKOUT EARLY")
+                .font(.system(.caption, design: .rounded, weight: .bold))
+                .foregroundStyle(Y2K.hotPink)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 14)
+                .frame(maxWidth: .infinity)
+                .background {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(.white.opacity(0.9))
+                        .shadow(color: .black.opacity(0.05), radius: 6, y: 3)
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(Y2K.hotPink.opacity(0.4), lineWidth: 1.5)
+                )
         }
-        .padding(.bottom, 8)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 12)
+    }
+
+    private var warmupSheet: some View {
+        VStack(spacing: 20) {
+            Text("🔥")
+                .font(.system(size: 48))
+
+            Text("WARM UP FIRST!")
+                .font(.system(.title2, design: .rounded, weight: .black))
+                .foregroundStyle(Y2K.hotPink)
+
+            VStack(alignment: .leading, spacing: 12) {
+                warmupStep(number: 1, text: "5 min light cardio (walking, bike, or stairmaster)")
+                warmupStep(number: 2, text: "Banded glute activation — 15 clamshells each side")
+                warmupStep(number: 3, text: "Bodyweight glute bridges — 2 sets of 15")
+                warmupStep(number: 4, text: "Light warm-up set for your first exercise")
+            }
+            .padding(.horizontal, 8)
+
+            Button {
+                showWarmup = false
+            } label: {
+                Text("LET'S GO 💪")
+                    .font(.system(.headline, design: .rounded, weight: .black))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 40)
+                    .padding(.vertical, 14)
+                    .background(
+                        LinearGradient(colors: [Y2K.hotPink, Y2K.bubblegumPink], startPoint: .leading, endPoint: .trailing),
+                        in: Capsule()
+                    )
+            }
+            .padding(.top, 8)
+        }
+        .padding(24)
+    }
+
+    private func warmupStep(number: Int, text: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Text("\(number)")
+                .font(.system(.caption, design: .rounded, weight: .black))
+                .foregroundStyle(.white)
+                .frame(width: 26, height: 26)
+                .background(
+                    LinearGradient(colors: [Y2K.hotPink, Y2K.bubblegumPink], startPoint: .topLeading, endPoint: .bottomTrailing),
+                    in: Circle()
+                )
+            Text(text)
+                .font(.system(.subheadline, design: .rounded))
+                .foregroundStyle(Y2K.turquoise)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }
 

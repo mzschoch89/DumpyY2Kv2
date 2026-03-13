@@ -97,6 +97,8 @@ class WorkoutViewModel {
         startTimer()
     }
 
+    var shouldAdvanceExercise: Int?
+
     func completeSet(exerciseIndex: Int, setIndex: Int, weight: Double, reps: Int) {
         guard activeSession != nil else { return }
         activeSession?.exerciseLogs[exerciseIndex].sets[setIndex].weight = weight
@@ -108,6 +110,17 @@ class WorkoutViewModel {
 
         if let log = activeSession?.exerciseLogs[exerciseIndex] {
             checkPersonalRecord(exerciseName: log.exerciseName, weight: weight)
+
+            if log.sets.allSatisfy({ $0.isCompleted }) {
+                if let session = activeSession {
+                    let nextIndex = session.exerciseLogs.indices.first { i in
+                        i > exerciseIndex && !session.exerciseLogs[i].sets.allSatisfy { $0.isCompleted }
+                    }
+                    if let next = nextIndex {
+                        shouldAdvanceExercise = next
+                    }
+                }
+            }
         }
     }
 
