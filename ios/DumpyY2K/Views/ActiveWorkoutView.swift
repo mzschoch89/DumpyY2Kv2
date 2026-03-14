@@ -3,6 +3,7 @@ import SwiftUI
 struct ActiveWorkoutView: View {
     @Bindable var viewModel: WorkoutViewModel
     @Environment(\.dismiss) private var dismiss
+    @State private var showAbortConfirmation: Bool = false
     @State private var showEndConfirmation: Bool = false
     @State private var selectedExerciseIndex: Int = 0
     @State private var editingWeight: [Int: String] = [:]
@@ -44,7 +45,7 @@ struct ActiveWorkoutView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
-                        showEndConfirmation = true
+                        showAbortConfirmation = true
                     } label: {
                         Image(systemName: "chevron.left")
                             .font(.headline)
@@ -56,6 +57,15 @@ struct ActiveWorkoutView: View {
                         .font(.system(.headline, design: .rounded, weight: .black))
                         .foregroundStyle(Y2K.turquoise)
                 }
+            }
+            .alert("Abort Workout?", isPresented: $showAbortConfirmation) {
+                Button("Abort", role: .destructive) {
+                    viewModel.cancelWorkout()
+                    dismiss()
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Your progress won't be saved.")
             }
             .alert("End Workout?", isPresented: $showEndConfirmation) {
                 Button("End Workout", role: .destructive) {

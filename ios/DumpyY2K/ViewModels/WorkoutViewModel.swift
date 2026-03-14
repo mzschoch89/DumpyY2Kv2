@@ -145,6 +145,14 @@ class WorkoutViewModel {
         save()
     }
 
+    func cancelWorkout() {
+        stopTimer()
+        stopRestTimer()
+        activeSession = nil
+        isWorkoutActive = false
+        workoutTimer = 0
+    }
+
     func swapExercise(at index: Int) {
         guard var session = activeSession else { return }
         let log = session.exerciseLogs[index]
