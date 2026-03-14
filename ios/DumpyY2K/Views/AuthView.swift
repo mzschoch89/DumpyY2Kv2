@@ -73,6 +73,19 @@ struct AuthView: View {
                                 RoundedRectangle(cornerRadius: 16)
                                     .strokeBorder(Y2K.lavender, lineWidth: 2)
                             )
+                            
+                            // SMS Opt-in Disclaimer
+                            HStack(alignment: .top, spacing: 6) {
+                                Image(systemName: "message.fill")
+                                    .font(.caption2)
+                                    .foregroundStyle(Y2K.turquoise)
+                                
+                                Text("By entering your number, you agree to receive a one-time verification code via SMS. Message & data rates may apply.")
+                                    .font(.system(.caption2, design: .rounded))
+                                    .foregroundStyle(Y2K.deepPurple.opacity(0.6))
+                                    .lineSpacing(2)
+                            }
+                            .padding(.top, 4)
                         }
                         
                         Button {
