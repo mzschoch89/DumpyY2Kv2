@@ -163,14 +163,14 @@ struct HomeView: View {
                     Text("\(viewModel.currentStreak)")
                         .font(.system(size: 44, weight: .black, design: .rounded))
                         .foregroundStyle(Y2K.turquoise)
-                    Text("🔥")
-                        .font(.system(size: 36))
                     Text(viewModel.currentStreak == 0 ? "Day Streak. Let's get this party started!" : "Day Streak. Keep going baby!")
                         .font(.system(.caption, design: .rounded, weight: .bold))
                         .foregroundStyle(Y2K.turquoise.opacity(0.6))
                 }
             }
-            Spacer()
+            Text("🔥")
+                .font(.system(size: 50))
+                .padding(.leading, -20)
         }
         .padding(20)
         .background {
