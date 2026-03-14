@@ -386,18 +386,22 @@ struct ActiveWorkoutView: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.top, 16)
+        .padding(.top, 20)
         .padding(.bottom, 12)
         .background {
-            Rectangle()
-                .fill(
-                    LinearGradient(
-                        colors: [Y2K.cream.opacity(0), Y2K.cream],
-                        startPoint: .top,
-                        endPoint: UnitPoint(x: 0.5, y: 0.3)
-                    )
+            VStack(spacing: 0) {
+                // Top fade/shadow effect
+                LinearGradient(
+                    colors: [.clear, Color.black.opacity(0.06)],
+                    startPoint: .top,
+                    endPoint: .bottom
                 )
-                .ignoresSafeArea()
+                .frame(height: 20)
+                
+                // Solid background for buttons
+                Y2K.cream
+            }
+            .ignoresSafeArea()
         }
     }
 
