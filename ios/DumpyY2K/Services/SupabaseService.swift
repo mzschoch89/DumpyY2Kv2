@@ -28,6 +28,27 @@ class SupabaseService {
         try await client.auth.signOut()
     }
     
+    func deleteAccount() async throws {
+        guard let userId = currentUser?.id else { return }
+        
+        // Delete user profile
+        try await client
+            .from("user_profiles")
+            .delete()
+            .eq("id", value: userId.uuidString)
+            .execute()
+        
+        // Delete club applications
+        try await client
+            .from("club_applications")
+            .delete()
+            .eq("user_id", value: userId.uuidString)
+            .execute()
+        
+        // Sign out
+        try await client.auth.signOut()
+    }
+    
     var currentUser: Supabase.User? {
         client.auth.currentUser
     }

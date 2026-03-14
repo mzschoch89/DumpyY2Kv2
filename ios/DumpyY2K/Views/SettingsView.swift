@@ -25,10 +25,25 @@ struct SettingsView: View {
         .alert("Delete Account", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
-                // Handle account deletion
+                deleteAccount()
             }
         } message: {
             Text("Are you sure you want to delete your account? This action cannot be undone.")
+        }
+    }
+    
+    private func deleteAccount() {
+        Task {
+            // Delete from Supabase
+            try? await SupabaseService.shared.deleteAccount()
+            
+            // Clear local data
+            userEmail = ""
+            userPhone = ""
+            UserDefaults.standard.removeObject(forKey: "hasAppliedToJoin")
+            
+            // Log out
+            isAuthenticated = false
         }
     }
     
