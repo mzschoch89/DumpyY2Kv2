@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "Glute Gains",
+      "name": "DumpyY2K",
       "path": "ios",
       "framework": "swift"
     }

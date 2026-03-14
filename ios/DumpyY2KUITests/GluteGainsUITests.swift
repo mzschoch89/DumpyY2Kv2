@@ -1,13 +1,13 @@
 //
-//  GluteGainsUITests.swift
-//  GluteGainsUITests
+//  DumpyY2KUITests.swift
+//  DumpyY2KUITests
 //
 //  Created by Rork on March 13, 2026.
 //
 
 import XCTest
 
-final class GluteGainsUITests: XCTestCase {
+final class DumpyY2KUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

@@ -1,13 +1,13 @@
 //
-//  GluteGainsUITestsLaunchTests.swift
-//  GluteGainsUITests
+//  DumpyY2KUITestsLaunchTests.swift
+//  DumpyY2KUITests
 //
 //  Created by Rork on March 13, 2026.
 //
 
 import XCTest
 
-final class GluteGainsUITestsLaunchTests: XCTestCase {
+final class DumpyY2KUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
