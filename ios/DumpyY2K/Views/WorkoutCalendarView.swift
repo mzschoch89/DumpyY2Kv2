@@ -127,19 +127,19 @@ struct WorkoutCalendarView: View {
                 .tracking(1.5)
             
             HStack(spacing: 20) {
-                StatBubble(
+                CalendarStatBubble(
                     value: "\(workoutsThisMonth)",
                     label: "Workouts",
                     color: Y2K.hotPink
                 )
                 
-                StatBubble(
+                CalendarStatBubble(
                     value: "\(prsThisMonth)",
                     label: "PRs Set",
                     color: Y2K.turquoise
                 )
                 
-                StatBubble(
+                CalendarStatBubble(
                     value: formattedTonnage,
                     label: "Total Tons",
                     color: Y2K.lavender
@@ -281,7 +281,7 @@ struct DayCell: View {
 
 // MARK: - Stat Bubble
 
-struct StatBubble: View {
+struct CalendarStatBubble: View {
     let value: String
     let label: String
     let color: Color
@@ -351,7 +351,7 @@ struct WorkoutDetailSheet: View {
                             .tracking(1.5)
                         
                         ForEach(session.exercises, id: \.name) { exercise in
-                            ExerciseRow(exercise: exercise)
+                            CalendarExerciseRow(exercise: exercise)
                         }
                     }
                     .padding(20)
@@ -402,7 +402,7 @@ struct DetailPill: View {
     }
 }
 
-struct ExerciseRow: View {
+struct CalendarExerciseRow: View {
     let exercise: CompletedExercise
     
     var body: some View {
