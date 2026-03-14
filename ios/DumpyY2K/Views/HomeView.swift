@@ -155,14 +155,19 @@ struct HomeView: View {
 
     private var streakCard: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("CURRENT STREAK")
-                    .font(.system(.body, design: .rounded, weight: .black))
+                    .font(.system(.subheadline, design: .rounded, weight: .black))
                     .foregroundStyle(Y2K.hotPink)
                     .tracking(1)
-                Text(viewModel.currentStreak == 0 ? "0 Day Streak. Let's get this party started!" : "\(viewModel.currentStreak) Day Streak. Keep going baby!")
-                    .font(.system(.title3, design: .rounded, weight: .bold))
-                    .foregroundStyle(Y2K.turquoise)
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text("\(viewModel.currentStreak)")
+                        .font(.system(size: 44, weight: .black, design: .rounded))
+                        .foregroundStyle(Y2K.turquoise)
+                    Text(viewModel.currentStreak == 0 ? "Day Streak. Let's get this party started!" : "Day Streak. Keep going baby!")
+                        .font(.system(.caption, design: .rounded, weight: .bold))
+                        .foregroundStyle(Y2K.turquoise.opacity(0.6))
+                }
             }
             Spacer()
             Text("🔥")
