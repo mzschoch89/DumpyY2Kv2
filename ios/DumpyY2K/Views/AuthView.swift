@@ -23,9 +23,9 @@ struct AuthView: View {
                     Image("Logo")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 135, height: 135)
-                        .scaleEffect(isPulsing ? 1.08 : 1.0)
-                        .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isPulsing)
+                        .frame(width: 155, height: 155)
+                        .scaleEffect(isPulsing ? 1.15 : 1.0)
+                        .animation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: isPulsing)
                         .onAppear { isPulsing = true }
                     
                     VStack(spacing: 6) {
