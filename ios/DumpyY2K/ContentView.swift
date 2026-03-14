@@ -6,8 +6,8 @@ struct ContentView: View {
     @State private var showWorkout: Bool = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Content area
+        ZStack(alignment: .bottom) {
+            // Content area (full screen)
             Group {
                 switch selectedTab {
                 case .gym:
@@ -29,7 +29,7 @@ struct ContentView: View {
                 }
             }
 
-            // Custom Tab Bar
+            // Floating Tab Bar (overlays content)
             CustomTabBar(selectedTab: $selectedTab)
         }
         .ignoresSafeArea(.keyboard)
@@ -46,7 +46,7 @@ struct CustomTabBar: View {
     @Binding var selectedTab: AppTab
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 6) {
             ForEach(AppTab.allCases, id: \.self) { tab in
                 TabBarButton(tab: tab, isSelected: selectedTab == tab) {
                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
@@ -55,20 +55,20 @@ struct CustomTabBar: View {
                 }
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
         .background {
             // Glassmorphism floating pill
             Capsule()
-                .fill(.regularMaterial)
+                .fill(.ultraThinMaterial)
                 .overlay(
                     Capsule()
-                        .fill(Color.white.opacity(0.7))
+                        .fill(Color.white.opacity(0.85))
                 )
-                .shadow(color: .black.opacity(0.15), radius: 20, y: 10)
+                .shadow(color: .black.opacity(0.12), radius: 24, y: 8)
         }
-        .padding(.horizontal, 24)
-        .padding(.bottom, 20)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 12)
     }
 }
 
@@ -79,22 +79,20 @@ struct TabBarButton: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 4) {
+            VStack(spacing: 3) {
                 Image(systemName: tab.icon)
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(.system(size: 22, weight: .medium))
 
                 Text(tab.title)
-                    .font(.system(size: 9, weight: .bold))
+                    .font(.system(size: 10, weight: .bold))
             }
             .foregroundStyle(isSelected ? Y2K.turquoise : Y2K.hotPink)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
-            .padding(.horizontal, 4)
+            .frame(width: 70, height: 54)
             .background {
                 if isSelected {
-                    Capsule()
+                    RoundedRectangle(cornerRadius: 16)
                         .fill(Color.white)
-                        .shadow(color: Y2K.turquoise.opacity(0.3), radius: 8, y: 2)
+                        .shadow(color: .black.opacity(0.08), radius: 8, y: 4)
                 }
             }
         }
