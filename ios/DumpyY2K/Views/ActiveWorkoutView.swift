@@ -394,16 +394,21 @@ struct ActiveWorkoutView: View {
         .padding(.bottom, 12)
         .background {
             VStack(spacing: 0) {
-                // Top fade effect - cream fades in from transparent
-                LinearGradient(
-                    colors: [Y2K.cream.opacity(0), Y2K.cream],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: 40)
+                // Blur effect at top
+                Rectangle()
+                    .fill(.ultraThinMaterial)
+                    .mask(
+                        LinearGradient(
+                            colors: [.clear, .black],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .frame(height: 30)
                 
-                // Solid background for buttons
-                Y2K.cream
+                // Frosted glass background for buttons
+                Rectangle()
+                    .fill(.regularMaterial)
             }
             .ignoresSafeArea()
         }
