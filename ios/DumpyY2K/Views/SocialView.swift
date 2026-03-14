@@ -6,8 +6,19 @@ struct SocialView: View {
     @State private var isSubmitting = false
     @State private var showError = false
     @State private var errorMessage = ""
+    @State private var showEmailRequired = false
+    @State private var navigateToSettings = false
     
     var body: some View {
+        NavigationStack {
+            mainContent
+                .navigationDestination(isPresented: $navigateToSettings) {
+                    SettingsView()
+                }
+        }
+    }
+    
+    private var mainContent: some View {
         ScrollView {
             VStack(spacing: 32) {
                 Spacer(minLength: 40)
@@ -55,7 +66,11 @@ struct SocialView: View {
 
                 VStack(spacing: 8) {
                     Button {
-                        submitApplication()
+                        if userEmail.isEmpty {
+                            showEmailRequired = true
+                        } else {
+                            submitApplication()
+                        }
                     } label: {
                         HStack(spacing: 6) {
                             if isSubmitting {
@@ -87,6 +102,10 @@ struct SocialView: View {
                     Button("OK", role: .cancel) { }
                 } message: {
                     Text(errorMessage)
+                }
+                .sheet(isPresented: $showEmailRequired) {
+                    EmailRequiredSheet(navigateToSettings: $navigateToSettings, showSheet: $showEmailRequired)
+                        .presentationDetents([.height(320)])
                 }
             }
             .padding(32)
@@ -162,5 +181,64 @@ struct UpcomingFeatureRow: View {
                 .fill(.white.opacity(0.85))
         }
         .y2kSolidBorder(color: borderColor.opacity(0.4), cornerRadius: 20, lineWidth: 2)
+    }
+}
+
+// MARK: - Email Required Sheet
+
+struct EmailRequiredSheet: View {
+    @Binding var navigateToSettings: Bool
+    @Binding var showSheet: Bool
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            // Cute emoji header
+            Text("📧")
+                .font(.system(size: 60))
+            
+            VStack(spacing: 8) {
+                Text("One more thing!")
+                    .font(.system(.title2, design: .rounded, weight: .black))
+                    .foregroundStyle(Y2K.hotPink)
+                
+                Text("Add your email to your settings\nbefore applying to the Glute Club!")
+                    .font(.system(.body, design: .rounded, weight: .medium))
+                    .foregroundStyle(Y2K.deepPurple.opacity(0.8))
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(4)
+            }
+            
+            VStack(spacing: 12) {
+                Button {
+                    showSheet = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        navigateToSettings = true
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "gearshape.fill")
+                        Text("GO TO SETTINGS")
+                            .font(.system(.subheadline, design: .rounded, weight: .black))
+                    }
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        LinearGradient(colors: [Y2K.hotPink, Y2K.bubblegumPink], startPoint: .leading, endPoint: .trailing),
+                        in: RoundedRectangle(cornerRadius: 16)
+                    )
+                }
+                
+                Button {
+                    showSheet = false
+                } label: {
+                    Text("Maybe later")
+                        .font(.system(.subheadline, design: .rounded, weight: .medium))
+                        .foregroundStyle(Y2K.turquoise)
+                }
+            }
+        }
+        .padding(32)
+        .background { Y2KBackgroundGradient() }
     }
 }
