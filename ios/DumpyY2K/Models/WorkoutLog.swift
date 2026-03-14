@@ -53,6 +53,24 @@ nonisolated struct WorkoutSession: Identifiable, Codable, Sendable {
         self.prsSet = prsSet
     }
     
+    // Custom decoding to handle missing prsSet in old data
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        date = try container.decode(Date.self, forKey: .date)
+        week = try container.decode(Int.self, forKey: .week)
+        day = try container.decode(WorkoutDay.self, forKey: .day)
+        mesocycleId = try container.decode(String.self, forKey: .mesocycleId)
+        exerciseLogs = try container.decode([ExerciseLog].self, forKey: .exerciseLogs)
+        isCompleted = try container.decode(Bool.self, forKey: .isCompleted)
+        durationSeconds = try container.decode(Int.self, forKey: .durationSeconds)
+        prsSet = try container.decodeIfPresent([String].self, forKey: .prsSet) ?? []
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id, date, week, day, mesocycleId, exerciseLogs, isCompleted, durationSeconds, prsSet
+    }
+    
     // Computed properties for calendar view
     var workoutName: String {
         "Day \(day.rawValue.prefix(1).uppercased())"
