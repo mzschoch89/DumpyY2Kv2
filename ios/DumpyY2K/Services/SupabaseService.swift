@@ -2,7 +2,7 @@ import Foundation
 import Supabase
 
 @MainActor
-class SupabaseService: ObservableObject {
+class SupabaseService {
     static let shared = SupabaseService()
     
     private let client: SupabaseClient
@@ -28,7 +28,7 @@ class SupabaseService: ObservableObject {
         try await client.auth.signOut()
     }
     
-    var currentUser: User? {
+    var currentUser: Supabase.User? {
         client.auth.currentUser
     }
     
