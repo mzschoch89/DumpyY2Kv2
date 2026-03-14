@@ -8,7 +8,7 @@ struct ActiveWorkoutView: View {
     @State private var selectedExerciseIndex: Int = 0
     @State private var editingWeight: [Int: String] = [:]
     @State private var editingReps: [Int: String] = [:]
-    @State private var showWarmup: Bool = true
+    @State private var showWarmup: Bool = false
     @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
@@ -33,6 +33,12 @@ struct ActiveWorkoutView: View {
                 warmupSheet
                     .presentationDetents([.medium])
                     .presentationDragIndicator(.visible)
+            }
+            .onAppear {
+                if !viewModel.warmupShown {
+                    showWarmup = true
+                    viewModel.warmupShown = true
+                }
             }
             .onChange(of: viewModel.shouldAdvanceExercise) { _, newValue in
                 if let next = newValue {

@@ -14,6 +14,7 @@ class WorkoutViewModel {
     var isResting: Bool = false
     var currentExerciseIndex: Int = 0
     var currentSetIndex: Int = 0
+    var warmupShown: Bool = false
 
     private var timerTask: Task<Void, Never>?
     private var restTimerTask: Task<Void, Never>?
@@ -61,6 +62,7 @@ class WorkoutViewModel {
     }
 
     func startWorkout() {
+        warmupShown = false
         guard let meso = currentMesocycle else { return }
         let day = nextDay
         let exercises = WorkoutProgramData.exercisesForDay(day)
