@@ -178,20 +178,25 @@ struct ProgressTabView: View {
                     .font(.subheadline)
             }
 
-            ScrollView(.horizontal) {
-                HStack(spacing: 14) {
-                    MilestoneBadge(icon: "star.fill", title: "Glute Starter", subtitle: "First workout", howTo: "Complete your first workout to unlock this badge!", isUnlocked: viewModel.totalWorkouts >= 1)
-                    MilestoneBadge(icon: "flame.fill", title: "3-Day Streak", subtitle: "3 workouts in a row", howTo: "Complete 3 workouts in a row without skipping a scheduled day.", isUnlocked: viewModel.currentStreak >= 3)
-                    MilestoneBadge(icon: "bolt.fill", title: "Heavy Hitter", subtitle: "10 workouts done", howTo: "Complete 10 total workouts. Keep showing up!", isUnlocked: viewModel.totalWorkouts >= 10)
-                    MilestoneBadge(icon: "trophy.fill", title: "7-Day Warrior", subtitle: "7 days straight", howTo: "Complete 7 workouts in a row without missing a single day.", isUnlocked: viewModel.currentStreak >= 7)
-                    MilestoneBadge(icon: "medal.fill", title: "PR Machine", subtitle: "5 personal records", howTo: "Set 5 personal records. Push yourself to lift heavier!", isUnlocked: viewModel.personalRecords.count >= 5)
-                    MilestoneBadge(icon: "dumbbell.fill", title: "Halfway Hero", subtitle: "Week 7 reached", howTo: "Complete the first 6 weeks and start Week 7 of the program.", isUnlocked: viewModel.currentWeek >= 7)
-                    MilestoneBadge(icon: "sparkles", title: "Ton Club", subtitle: "1 ton lifted", howTo: "Lift a cumulative total of 1 ton (2000 lbs) across all workouts.", isUnlocked: viewModel.totalTonsLifted >= 1.0)
-                    MilestoneBadge(icon: "crown.fill", title: "Elite Glutes", subtitle: "All 13 weeks done", howTo: "Complete the entire 13-week Glute Gains program. You're a legend!", isUnlocked: viewModel.currentWeek > 13)
-                }
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 16) {
+                // Row 1: Getting Started
+                MilestoneBadge(icon: "star.fill", title: "Glute Starter", howTo: "Complete your first workout to unlock this badge!", isUnlocked: viewModel.totalWorkouts >= 1)
+                MilestoneBadge(icon: "flame.fill", title: "On Fire", howTo: "Complete 3 workouts in a row without skipping.", isUnlocked: viewModel.currentStreak >= 3)
+                MilestoneBadge(icon: "bolt.fill", title: "Committed", howTo: "Complete 10 total workouts. You're building a habit!", isUnlocked: viewModel.totalWorkouts >= 10)
+                MilestoneBadge(icon: "trophy.fill", title: "Week Warrior", howTo: "Hit a 7-day workout streak. No days off!", isUnlocked: viewModel.currentStreak >= 7)
+                
+                // Row 2: Leveling Up
+                MilestoneBadge(icon: "medal.fill", title: "PR Crusher", howTo: "Set 5 personal records. Keep pushing heavier!", isUnlocked: viewModel.personalRecords.count >= 5)
+                MilestoneBadge(icon: "dumbbell.fill", title: "Halfway There", howTo: "Reach Week 7 of the program. You're crushing it!", isUnlocked: viewModel.currentWeek >= 7)
+                MilestoneBadge(icon: "scalemass.fill", title: "Ton Club", howTo: "Lift a cumulative total of 1 ton (2000 lbs).", isUnlocked: viewModel.totalTonsLifted >= 1.0)
+                MilestoneBadge(icon: "figure.strengthtraining.traditional", title: "Iron Addict", howTo: "Complete 25 total workouts. This is your life now!", isUnlocked: viewModel.totalWorkouts >= 25)
+                
+                // Row 3: Elite Status
+                MilestoneBadge(icon: "hands.clap.fill", title: "10 PR Party", howTo: "Set 10 personal records. You're getting STRONG!", isUnlocked: viewModel.personalRecords.count >= 10)
+                MilestoneBadge(icon: "moon.stars.fill", title: "Consistency Queen", howTo: "Hit a 14-day streak. Two weeks straight!", isUnlocked: viewModel.currentStreak >= 14)
+                MilestoneBadge(icon: "sparkles", title: "5 Ton Titan", howTo: "Lift 5 tons total. You're moving serious weight!", isUnlocked: viewModel.totalTonsLifted >= 5.0)
+                MilestoneBadge(icon: "crown.fill", title: "Elite Glutes", howTo: "Complete all 13 weeks. You're a LEGEND! 👑", isUnlocked: viewModel.currentWeek > 13)
             }
-            .contentMargins(.horizontal, 0)
-            .scrollIndicators(.hidden)
         }
     }
 }
@@ -221,7 +226,6 @@ struct MeasurementRow: View {
 struct MilestoneBadge: View {
     let icon: String
     let title: String
-    let subtitle: String
     let howTo: String
     let isUnlocked: Bool
     
@@ -231,26 +235,27 @@ struct MilestoneBadge: View {
         Button {
             showingInfo = true
         } label: {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 ZStack {
                     Circle()
                         .fill(isUnlocked ?
                             LinearGradient(colors: [Y2K.hotPink, Y2K.bubblegumPink, Y2K.lavender], startPoint: .topLeading, endPoint: .bottomTrailing) :
                             LinearGradient(colors: [Color.gray.opacity(0.15), Color.gray.opacity(0.1)], startPoint: .topLeading, endPoint: .bottomTrailing)
                         )
-                        .frame(width: 64, height: 64)
+                        .frame(width: 54, height: 54)
 
                     Image(systemName: icon)
-                        .font(.title3)
+                        .font(.system(size: 22))
                         .foregroundStyle(isUnlocked ? .white : .gray.opacity(0.35))
                 }
 
                 Text(title)
-                    .font(.system(.caption2, design: .rounded, weight: .bold))
+                    .font(.system(size: 10, weight: .bold, design: .rounded))
                     .foregroundStyle(isUnlocked ? Y2K.turquoise : Y2K.turquoise.opacity(0.3))
                     .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
             }
-            .frame(width: 85)
         }
         .buttonStyle(.plain)
         .alert(title, isPresented: $showingInfo) {
