@@ -126,6 +126,11 @@ class WorkoutViewModel {
         }
     }
 
+    func uncompleteSet(exerciseIndex: Int, setIndex: Int) {
+        guard activeSession != nil else { return }
+        activeSession?.exerciseLogs[exerciseIndex].sets[setIndex].isCompleted = false
+    }
+
     func finishWorkout() {
         stopTimer()
         stopRestTimer()

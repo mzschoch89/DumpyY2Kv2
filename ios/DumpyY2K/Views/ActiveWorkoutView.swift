@@ -273,10 +273,14 @@ struct ActiveWorkoutView: View {
                     repsText: editingReps[setIndex] ?? (setLog.reps > 0 ? "\(setLog.reps)" : ""),
                     onWeightChange: { editingWeight[setIndex] = $0 },
                     onRepsChange: { editingReps[setIndex] = $0 },
-                    onComplete: {
-                        let weight = Double(editingWeight[setIndex] ?? "") ?? setLog.weight
-                        let reps = Int(editingReps[setIndex] ?? "") ?? setLog.reps
-                        viewModel.completeSet(exerciseIndex: exerciseIndex, setIndex: setIndex, weight: weight, reps: reps)
+                    onToggleComplete: {
+                        if setLog.isCompleted {
+                            viewModel.uncompleteSet(exerciseIndex: exerciseIndex, setIndex: setIndex)
+                        } else {
+                            let weight = Double(editingWeight[setIndex] ?? "") ?? setLog.weight
+                            let reps = Int(editingReps[setIndex] ?? "") ?? setLog.reps
+                            viewModel.completeSet(exerciseIndex: exerciseIndex, setIndex: setIndex, weight: weight, reps: reps)
+                        }
                     },
                     isTextFieldFocused: $isTextFieldFocused
                 )
@@ -485,7 +489,7 @@ struct SetRow: View {
     let repsText: String
     let onWeightChange: (String) -> Void
     let onRepsChange: (String) -> Void
-    let onComplete: () -> Void
+    let onToggleComplete: () -> Void
     var isTextFieldFocused: FocusState<Bool>.Binding
 
     var body: some View {
@@ -536,13 +540,12 @@ struct SetRow: View {
                 .foregroundStyle(Y2K.turquoise.opacity(0.4))
 
             Button {
-                onComplete()
+                onToggleComplete()
             } label: {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(.title2)
                     .foregroundStyle(isCompleted ? Y2K.limeGreen : Y2K.hotPink.opacity(0.4))
             }
-            .disabled(isCompleted)
         }
         .padding(.vertical, 4)
     }
