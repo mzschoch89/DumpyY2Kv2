@@ -123,9 +123,10 @@ struct ExerciseRow: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            Image(systemName: exercise.category.icon)
-                .font(.title3)
-                .foregroundStyle(borderColor)
+            Image(exercise.iconTurquoise)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 32, height: 32)
                 .frame(width: 48, height: 48)
                 .background(borderColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 14))
 
@@ -219,9 +220,11 @@ struct ExerciseDetailSheet: View {
                     .shadow(color: .black.opacity(0.15), radius: 3, y: 2)
                     .multilineTextAlignment(.center)
 
-                Image(systemName: exercise.category.icon)
-                    .font(.system(size: 44))
-                    .foregroundStyle(.white.opacity(0.7))
+                Image(exercise.iconWhite)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80, height: 80)
+                    .opacity(0.9)
 
                 Text(exercise.category.displayName.uppercased())
                     .font(.system(.caption, design: .rounded, weight: .black))

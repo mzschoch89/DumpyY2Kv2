@@ -204,9 +204,11 @@ struct ActiveWorkoutView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .lineLimit(nil)
 
-                    Image(systemName: log.category.icon)
-                        .font(.system(size: 36))
-                        .foregroundStyle(.white.opacity(0.7))
+                    Image("\(log.exerciseId)-white")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .opacity(0.9)
 
                     if let meso = viewModel.currentMesocycle {
                         HStack(spacing: 16) {
