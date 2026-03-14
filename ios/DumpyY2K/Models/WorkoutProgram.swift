@@ -164,7 +164,7 @@ struct WorkoutProgramData {
     static let exercises: [ExerciseCategory: [WorkoutDay: (primary: Exercise, backup: Exercise)]] = [
         .squat: [
             .dayA: (
-                primary: Exercise(id: "smith_deficit_lunge", name: "Smith Deficit Reverse Lunge", cue: "Stand on a small platform, step back and sink deep. Push through your front heel to stand back up. You should feel a deep stretch in your glute at the bottom.", category: .squat, isBackup: false),
+                primary: Exercise(id: "smith_deficit_lunge", name: "Smith Machine Deficit Reverse Lunge", cue: "Stand on a small platform, step back and sink deep. Push through your front heel to stand back up. You should feel a deep stretch in your glute at the bottom.", category: .squat, isBackup: false),
                 backup: Exercise(id: "bulgarian_split_squat", name: "Dumbbell Bulgarian Split Squat", cue: "Back foot on bench, lean your torso slightly forward, sink down and drive up through front heel", category: .squat, isBackup: true)
             ),
             .dayB: (
