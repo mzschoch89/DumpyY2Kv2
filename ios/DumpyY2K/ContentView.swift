@@ -62,36 +62,23 @@ struct CustomTabBar: View {
         .background {
             // Glassmorphism effect
             ZStack {
-                // Blur background
+                // Glass blur
                 Rectangle()
-                    .fill(.ultraThinMaterial)
+                    .fill(.regularMaterial)
 
-                // Gradient overlay for Y2K vibe
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.98, green: 0.95, blue: 0.96).opacity(0.8),
-                        Color(red: 1.0, green: 0.92, blue: 0.95).opacity(0.6)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
+                // Soft pink tint overlay
+                Color(red: 1.0, green: 0.94, blue: 0.96).opacity(0.5)
 
-                // Top border shine
+                // Top highlight line
                 VStack {
                     Rectangle()
-                        .fill(
-                            LinearGradient(
-                                colors: [.white.opacity(0.6), .white.opacity(0.1)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
-                        .frame(height: 1)
+                        .fill(.white.opacity(0.8))
+                        .frame(height: 0.5)
                     Spacer()
                 }
             }
         }
-        .shadow(color: Y2K.hotPink.opacity(0.1), radius: 20, y: -10)
+        .shadow(color: .black.opacity(0.08), radius: 12, y: -4)
     }
 }
 
