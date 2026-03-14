@@ -10,6 +10,13 @@ struct ActiveWorkoutView: View {
     @State private var editingReps: [Int: String] = [:]
     @State private var showWarmup: Bool = false
     @FocusState private var isTextFieldFocused: Bool
+    
+    private var allSetsCompleted: Bool {
+        guard let session = viewModel.activeSession else { return false }
+        return session.exerciseLogs.allSatisfy { log in
+            log.sets.allSatisfy { $0.isCompleted }
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -401,20 +408,22 @@ struct ActiveWorkoutView: View {
             Button {
                 showEndConfirmation = true
             } label: {
-                Text("END WORKOUT EARLY")
+                Text(allSetsCompleted ? "GREAT JOB - FINISH AND LOG SESSION" : "END WORKOUT EARLY")
                     .font(.system(.caption, design: .rounded, weight: .bold))
-                    .foregroundStyle(Y2K.hotPink)
+                    .foregroundStyle(allSetsCompleted ? .white : Y2K.hotPink)
                     .padding(.horizontal, 24)
                     .padding(.vertical, 12)
                     .frame(maxWidth: .infinity)
                     .background {
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(.white.opacity(0.9))
+                            .fill(allSetsCompleted ? 
+                                  LinearGradient(colors: [Y2K.hotPink, Y2K.bubblegumPink], startPoint: .leading, endPoint: .trailing) :
+                                  LinearGradient(colors: [.white.opacity(0.9), .white.opacity(0.9)], startPoint: .leading, endPoint: .trailing))
                             .shadow(color: .black.opacity(0.05), radius: 6, y: 3)
                     }
                     .overlay(
                         RoundedRectangle(cornerRadius: 16)
-                            .strokeBorder(Y2K.hotPink.opacity(0.4), lineWidth: 1.5)
+                            .strokeBorder(allSetsCompleted ? Color.clear : Y2K.hotPink.opacity(0.4), lineWidth: 1.5)
                     )
             }
         }
