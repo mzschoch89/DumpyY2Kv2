@@ -8,10 +8,9 @@ class SupabaseService: ObservableObject {
     private let client: SupabaseClient
     
     private init() {
-        // TODO: Replace with your Supabase credentials
         client = SupabaseClient(
-            supabaseURL: URL(string: "YOUR_SUPABASE_URL")!,
-            supabaseKey: "YOUR_SUPABASE_ANON_KEY"
+            supabaseURL: URL(string: "https://sfrmmnucqagjivjkpkvw.supabase.co")!,
+            supabaseKey: "sb_publishable_e8xIjWbwpeY2DXlcqcAlug_D7IlY_nZ"
         )
     }
     
