@@ -46,39 +46,29 @@ struct CustomTabBar: View {
     @Binding var selectedTab: AppTab
 
     var body: some View {
-        HStack {
+        HStack(spacing: 8) {
             ForEach(AppTab.allCases, id: \.self) { tab in
-                Spacer()
                 TabBarButton(tab: tab, isSelected: selectedTab == tab) {
-                    withAnimation(.easeInOut(duration: 0.2)) {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                         selectedTab = tab
                     }
                 }
-                Spacer()
             }
         }
-        .padding(.top, 12)
-        .padding(.bottom, 28)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .background {
-            // Glassmorphism effect
-            ZStack {
-                // Glass blur
-                Rectangle()
-                    .fill(.regularMaterial)
-
-                // Soft pink tint overlay
-                Color(red: 1.0, green: 0.94, blue: 0.96).opacity(0.5)
-
-                // Top highlight line
-                VStack {
-                    Rectangle()
-                        .fill(.white.opacity(0.8))
-                        .frame(height: 0.5)
-                    Spacer()
-                }
-            }
+            // Glassmorphism floating pill
+            Capsule()
+                .fill(.regularMaterial)
+                .overlay(
+                    Capsule()
+                        .fill(Color.white.opacity(0.7))
+                )
+                .shadow(color: .black.opacity(0.15), radius: 20, y: 10)
         }
-        .shadow(color: .black.opacity(0.08), radius: 12, y: -4)
+        .padding(.horizontal, 24)
+        .padding(.bottom, 20)
     }
 }
 
@@ -91,14 +81,24 @@ struct TabBarButton: View {
         Button(action: action) {
             VStack(spacing: 4) {
                 Image(systemName: tab.icon)
-                    .font(.system(size: 22))
-                    .foregroundStyle(isSelected ? Y2K.turquoise : Y2K.hotPink)
+                    .font(.system(size: 20, weight: .semibold))
 
                 Text(tab.title)
-                    .font(.system(size: 10, weight: isSelected ? .heavy : .bold))
-                    .foregroundStyle(isSelected ? Y2K.turquoise : Y2K.hotPink)
+                    .font(.system(size: 9, weight: .bold))
+            }
+            .foregroundStyle(isSelected ? Y2K.turquoise : Y2K.hotPink)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 4)
+            .background {
+                if isSelected {
+                    Capsule()
+                        .fill(Color.white)
+                        .shadow(color: Y2K.turquoise.opacity(0.3), radius: 8, y: 2)
+                }
             }
         }
+        .buttonStyle(.plain)
     }
 }
 
