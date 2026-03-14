@@ -22,7 +22,31 @@ struct ActiveWorkoutView: View {
                         restTimerBanner
                     }
                     exerciseTabBar
-                    exerciseContent
+                    ZStack {
+                        exerciseContent
+                        
+                        // Top and bottom fade overlays
+                        VStack {
+                            // Top fade
+                            LinearGradient(
+                                colors: [Y2K.cream, Y2K.cream.opacity(0)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                            .frame(height: 30)
+                            
+                            Spacer()
+                            
+                            // Bottom fade
+                            LinearGradient(
+                                colors: [Y2K.cream.opacity(0), Y2K.cream],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                            .frame(height: 50)
+                        }
+                        .allowsHitTesting(false)
+                    }
                     Spacer(minLength: 0)
                     if !isTextFieldFocused {
                         bottomActions
