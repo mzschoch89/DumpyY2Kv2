@@ -19,15 +19,18 @@ struct AuthView: View {
                 
                 // Logo & Header
                 VStack(spacing: 16) {
-                    Text("🍑")
-                        .font(.system(size: 80))
+                    Image("AppIcon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .clipShape(RoundedRectangle(cornerRadius: 22))
                     
                     VStack(spacing: 6) {
                         HStack(spacing: 0) {
-                            Text("GLUTE ")
+                            Text("DUMPY ")
                                 .font(.system(size: 42, weight: .black, design: .rounded))
                                 .foregroundStyle(Y2K.hotPink)
-                            Text("Gains!")
+                            Text("Y2K")
                                 .font(.system(size: 42, weight: .bold, design: .serif))
                                 .italic()
                                 .foregroundStyle(Y2K.turquoise)
@@ -186,11 +189,19 @@ struct AuthView: View {
                 Spacer()
                 
                 // Footer
-                Text("By continuing, you agree to our Terms & Privacy Policy")
-                    .font(.system(.caption2, design: .rounded))
-                    .foregroundStyle(Y2K.deepPurple.opacity(0.5))
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 30)
+                HStack(spacing: 4) {
+                    Text("By continuing, you agree to our")
+                        .foregroundStyle(Y2K.deepPurple.opacity(0.5))
+                    Link("Terms", destination: URL(string: "https://dumpyy2k.com/terms")!)
+                        .foregroundStyle(Y2K.turquoise)
+                    Text("&")
+                        .foregroundStyle(Y2K.deepPurple.opacity(0.5))
+                    Link("Privacy Policy", destination: URL(string: "https://dumpyy2k.com/privacy")!)
+                        .foregroundStyle(Y2K.turquoise)
+                }
+                .font(.system(.caption2, design: .rounded))
+                .multilineTextAlignment(.center)
+                .padding(.bottom, 30)
             }
         }
         .alert("Oops!", isPresented: $showError) {
