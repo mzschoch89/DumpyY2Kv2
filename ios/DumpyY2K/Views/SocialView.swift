@@ -2,6 +2,10 @@ import SwiftUI
 
 struct SocialView: View {
     @AppStorage("hasAppliedToJoin") private var hasApplied = false
+    @AppStorage("userEmail") private var userEmail = ""
+    @State private var isSubmitting = false
+    @State private var showError = false
+    @State private var errorMessage = ""
     
     var body: some View {
         ScrollView {
@@ -51,11 +55,17 @@ struct SocialView: View {
 
                 VStack(spacing: 8) {
                     Button {
-                        hasApplied = true
+                        submitApplication()
                     } label: {
                         HStack(spacing: 6) {
-                            Image(systemName: hasApplied ? "checkmark.circle.fill" : "cursorarrow.click.2")
-                                .font(.caption)
+                            if isSubmitting {
+                                ProgressView()
+                                    .tint(Y2K.deepPurple)
+                                    .scaleEffect(0.8)
+                            } else {
+                                Image(systemName: hasApplied ? "checkmark.circle.fill" : "cursorarrow.click.2")
+                                    .font(.caption)
+                            }
                             Text(hasApplied ? "APPLIED" : "APPLY TO JOIN")
                                 .font(.system(.caption, design: .rounded, weight: .black))
                         }
@@ -64,7 +74,7 @@ struct SocialView: View {
                         .padding(.vertical, 12)
                         .background(.white.opacity(0.85), in: Capsule())
                     }
-                    .disabled(hasApplied)
+                    .disabled(hasApplied || isSubmitting)
                     
                     Text("This will only share your email.\nYou can later choose a name to join the community.")
                         .font(.system(.caption, design: .rounded, weight: .light))
@@ -72,6 +82,11 @@ struct SocialView: View {
                         .multilineTextAlignment(.center)
                         .lineSpacing(3)
                         .fixedSize(horizontal: false, vertical: true)
+                }
+                .alert("Error", isPresented: $showError) {
+                    Button("OK", role: .cancel) { }
+                } message: {
+                    Text(errorMessage)
                 }
             }
             .padding(32)
@@ -84,6 +99,27 @@ struct SocialView: View {
                 .offset(x: -120, y: 120)
         }
         .frame(height: 380)
+    }
+    
+    private func submitApplication() {
+        guard !userEmail.isEmpty else {
+            // For now, just mark as applied locally
+            // In production, you'd prompt for email or get from auth
+            hasApplied = true
+            return
+        }
+        
+        isSubmitting = true
+        Task {
+            do {
+                try await SupabaseService.shared.submitClubApplication(email: userEmail)
+                hasApplied = true
+            } catch {
+                errorMessage = "Failed to submit application. Please try again."
+                showError = true
+            }
+            isSubmitting = false
+        }
     }
 
     private var featuresPreview: some View {
