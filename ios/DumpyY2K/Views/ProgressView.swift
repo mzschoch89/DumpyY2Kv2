@@ -180,10 +180,14 @@ struct ProgressTabView: View {
 
             ScrollView(.horizontal) {
                 HStack(spacing: 14) {
-                    MilestoneBadge(icon: "star.fill", title: "Glute Starter", subtitle: "First workout", isUnlocked: viewModel.totalWorkouts >= 1)
-                    MilestoneBadge(icon: "flame.fill", title: "7-Day Streak", subtitle: "3 workouts in a row", isUnlocked: viewModel.currentStreak >= 3)
-                    MilestoneBadge(icon: "bolt.fill", title: "Heavy Hitter", subtitle: "10 workouts done", isUnlocked: viewModel.totalWorkouts >= 10)
-                    MilestoneBadge(icon: "crown.fill", title: "Elite Glutes", subtitle: "All 13 weeks done", isUnlocked: viewModel.currentWeek > 13)
+                    MilestoneBadge(icon: "star.fill", title: "Glute Starter", subtitle: "First workout", howTo: "Complete your first workout to unlock this badge!", isUnlocked: viewModel.totalWorkouts >= 1)
+                    MilestoneBadge(icon: "flame.fill", title: "3-Day Streak", subtitle: "3 workouts in a row", howTo: "Complete 3 workouts in a row without skipping a scheduled day.", isUnlocked: viewModel.currentStreak >= 3)
+                    MilestoneBadge(icon: "bolt.fill", title: "Heavy Hitter", subtitle: "10 workouts done", howTo: "Complete 10 total workouts. Keep showing up!", isUnlocked: viewModel.totalWorkouts >= 10)
+                    MilestoneBadge(icon: "trophy.fill", title: "7-Day Warrior", subtitle: "7 days straight", howTo: "Complete 7 workouts in a row without missing a single day.", isUnlocked: viewModel.currentStreak >= 7)
+                    MilestoneBadge(icon: "medal.fill", title: "PR Machine", subtitle: "5 personal records", howTo: "Set 5 personal records. Push yourself to lift heavier!", isUnlocked: viewModel.personalRecords.count >= 5)
+                    MilestoneBadge(icon: "dumbbell.fill", title: "Halfway Hero", subtitle: "Week 7 reached", howTo: "Complete the first 6 weeks and start Week 7 of the program.", isUnlocked: viewModel.currentWeek >= 7)
+                    MilestoneBadge(icon: "sparkles", title: "Ton Club", subtitle: "1 ton lifted", howTo: "Lift a cumulative total of 1 ton (2000 lbs) across all workouts.", isUnlocked: viewModel.totalTonsLifted >= 1.0)
+                    MilestoneBadge(icon: "crown.fill", title: "Elite Glutes", subtitle: "All 13 weeks done", howTo: "Complete the entire 13-week Glute Gains program. You're a legend!", isUnlocked: viewModel.currentWeek > 13)
                 }
             }
             .contentMargins(.horizontal, 0)
@@ -218,29 +222,42 @@ struct MilestoneBadge: View {
     let icon: String
     let title: String
     let subtitle: String
+    let howTo: String
     let isUnlocked: Bool
+    
+    @State private var showingInfo = false
 
     var body: some View {
-        VStack(spacing: 10) {
-            ZStack {
-                Circle()
-                    .fill(isUnlocked ?
-                        LinearGradient(colors: [Y2K.hotPink, Y2K.bubblegumPink, Y2K.lavender], startPoint: .topLeading, endPoint: .bottomTrailing) :
-                        LinearGradient(colors: [Color.gray.opacity(0.15), Color.gray.opacity(0.1)], startPoint: .topLeading, endPoint: .bottomTrailing)
-                    )
-                    .frame(width: 64, height: 64)
+        Button {
+            showingInfo = true
+        } label: {
+            VStack(spacing: 10) {
+                ZStack {
+                    Circle()
+                        .fill(isUnlocked ?
+                            LinearGradient(colors: [Y2K.hotPink, Y2K.bubblegumPink, Y2K.lavender], startPoint: .topLeading, endPoint: .bottomTrailing) :
+                            LinearGradient(colors: [Color.gray.opacity(0.15), Color.gray.opacity(0.1)], startPoint: .topLeading, endPoint: .bottomTrailing)
+                        )
+                        .frame(width: 64, height: 64)
 
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundStyle(isUnlocked ? .white : .gray.opacity(0.35))
+                    Image(systemName: icon)
+                        .font(.title3)
+                        .foregroundStyle(isUnlocked ? .white : .gray.opacity(0.35))
+                }
+
+                Text(title)
+                    .font(.system(.caption2, design: .rounded, weight: .bold))
+                    .foregroundStyle(isUnlocked ? Y2K.turquoise : Y2K.turquoise.opacity(0.3))
+                    .multilineTextAlignment(.center)
             }
-
-            Text(title)
-                .font(.system(.caption2, design: .rounded, weight: .bold))
-                .foregroundStyle(isUnlocked ? Y2K.turquoise : Y2K.turquoise.opacity(0.3))
-                .multilineTextAlignment(.center)
+            .frame(width: 85)
         }
-        .frame(width: 85)
+        .buttonStyle(.plain)
+        .alert(title, isPresented: $showingInfo) {
+            Button("Got it!", role: .cancel) { }
+        } message: {
+            Text(isUnlocked ? "🎉 You've unlocked this badge!\n\n\(howTo)" : "🔒 Locked\n\n\(howTo)")
+        }
     }
 }
 
