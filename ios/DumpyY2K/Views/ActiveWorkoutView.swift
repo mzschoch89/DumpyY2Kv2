@@ -146,9 +146,11 @@ struct ActiveWorkoutView: View {
                                 }
                                 Text(log.category.displayName.uppercased())
                                     .font(.system(.caption2, design: .rounded, weight: .bold))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.8)
                             }
                             .foregroundStyle(selectedExerciseIndex == index ? .white : (completed ? Y2K.limeGreen : Y2K.turquoise))
-                            .padding(.horizontal, 18)
+                            .frame(width: 80)
                             .padding(.vertical, 12)
                             .background {
                                 if selectedExerciseIndex == index {
