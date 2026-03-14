@@ -168,10 +168,9 @@ struct HomeView: View {
                         .foregroundStyle(Y2K.turquoise.opacity(0.6))
                 }
             }
-            Spacer(minLength: 8)
+            Spacer(minLength: 0)
             Text("🔥")
                 .font(.system(size: 50))
-                .padding(.trailing, 8)
         }
         .padding(20)
         .background {

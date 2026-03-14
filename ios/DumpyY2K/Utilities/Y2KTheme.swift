@@ -161,12 +161,12 @@ struct Y2KHeader: View {
                 .italic()
                 .foregroundStyle(Y2K.turquoise)
                 .baselineOffset(-2)
+                .rotationEffect(.degrees(-3))
             if let emoji {
                 Text(" " + emoji)
-                    .font(.title2)
+                    .font(.system(size: 32))
             }
         }
-        .rotationEffect(.degrees(-2.5))
     }
 }
 
