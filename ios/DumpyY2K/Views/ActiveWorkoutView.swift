@@ -317,14 +317,19 @@ struct ActiveWorkoutView: View {
     }
 
     private var bottomActions: some View {
-        Button {
-            showEndConfirmation = true
-        } label: {
-            Text("END WORKOUT EARLY")
+        VStack(spacing: 10) {
+            Button {
+                showWarmup = true
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "flame.fill")
+                        .font(.caption)
+                    Text("VIEW WARMUP")
+                }
                 .font(.system(.caption, design: .rounded, weight: .bold))
-                .foregroundStyle(Y2K.hotPink)
+                .foregroundStyle(Y2K.limeGreen)
                 .padding(.horizontal, 24)
-                .padding(.vertical, 14)
+                .padding(.vertical, 12)
                 .frame(maxWidth: .infinity)
                 .background {
                     RoundedRectangle(cornerRadius: 16)
@@ -333,8 +338,29 @@ struct ActiveWorkoutView: View {
                 }
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .strokeBorder(Y2K.hotPink.opacity(0.4), lineWidth: 1.5)
+                        .strokeBorder(Y2K.limeGreen.opacity(0.4), lineWidth: 1.5)
                 )
+            }
+            
+            Button {
+                showEndConfirmation = true
+            } label: {
+                Text("END WORKOUT EARLY")
+                    .font(.system(.caption, design: .rounded, weight: .bold))
+                    .foregroundStyle(Y2K.hotPink)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity)
+                    .background {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(.white.opacity(0.9))
+                            .shadow(color: .black.opacity(0.05), radius: 6, y: 3)
+                    }
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .strokeBorder(Y2K.hotPink.opacity(0.4), lineWidth: 1.5)
+                    )
+            }
         }
         .padding(.horizontal, 16)
         .padding(.bottom, 12)
@@ -350,7 +376,7 @@ struct ActiveWorkoutView: View {
                 .foregroundStyle(Y2K.hotPink)
 
             VStack(alignment: .leading, spacing: 12) {
-                warmupStep(number: 1, text: "5 min light cardio (walking, bike, or stairmaster)")
+                warmupStep(number: 1, text: "Incline walk — 15 min · Incline 8-12% · Speed 3.0-3.5 mph")
                 warmupStep(number: 2, text: "Banded glute activation — 15 clamshells each side")
                 warmupStep(number: 3, text: "Bodyweight glute bridges — 2 sets of 15")
                 warmupStep(number: 4, text: "Light warm-up set for your first exercise")
