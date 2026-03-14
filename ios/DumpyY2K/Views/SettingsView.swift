@@ -42,6 +42,12 @@ struct SettingsView: View {
             userPhone = ""
             UserDefaults.standard.removeObject(forKey: "hasAppliedToJoin")
             
+            // Clear workout data
+            UserDefaults.standard.removeObject(forKey: "completedSessions")
+            UserDefaults.standard.removeObject(forKey: "personalRecords")
+            UserDefaults.standard.removeObject(forKey: "bodyMeasurements")
+            UserDefaults.standard.removeObject(forKey: "currentWeek")
+            
             // Log out
             isAuthenticated = false
         }
