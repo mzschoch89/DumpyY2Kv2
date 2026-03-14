@@ -47,16 +47,24 @@ struct SocialView: View {
                     .multilineTextAlignment(.center)
                     .lineSpacing(4)
 
-                HStack(spacing: 6) {
-                    Image(systemName: "bell.fill")
-                        .font(.caption)
-                    Text("WE'LL NOTIFY YOU")
-                        .font(.system(.caption, design: .rounded, weight: .black))
+                VStack(spacing: 8) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "cursorarrow.click.2")
+                            .font(.caption)
+                        Text("APPLY TO JOIN")
+                            .font(.system(.caption, design: .rounded, weight: .black))
+                    }
+                    .foregroundStyle(Y2K.deepGreen)
+                    .padding(.horizontal, 22)
+                    .padding(.vertical, 12)
+                    .background(.white.opacity(0.85), in: Capsule())
+                    
+                    Text("This will only share your email.\nYou can later choose a name to join the community.")
+                        .font(.system(.caption2, design: .rounded, weight: .regular))
+                        .foregroundStyle(Y2K.lavender)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(2)
                 }
-                .foregroundStyle(Y2K.deepGreen)
-                .padding(.horizontal, 22)
-                .padding(.vertical, 12)
-                .background(.white.opacity(0.85), in: Capsule())
             }
             .padding(32)
 
@@ -73,7 +81,7 @@ struct SocialView: View {
     private var featuresPreview: some View {
         VStack(spacing: 14) {
             UpcomingFeatureRow(icon: "trophy.fill", title: "WEEKLY LEADERS", detail: "Compete with friends on the leaderboard", borderColor: Y2K.teal)
-            UpcomingFeatureRow(icon: "bubble.left.fill", title: "GLUTE CLUB FEED", detail: "Share your workout wins and form checks", borderColor: Y2K.deepPurple)
+            UpcomingFeatureRow(icon: "bubble.left.fill", title: "GLUTE CLUB FEED", detail: "Share your workout wins and activity with your community.", borderColor: Y2K.deepPurple)
             UpcomingFeatureRow(icon: "camera.fill", title: "PROGRESS PICS", detail: "Track your visual transformation journey", borderColor: Y2K.hotPink)
         }
     }
