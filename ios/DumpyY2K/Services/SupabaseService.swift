@@ -1,6 +1,5 @@
 import Foundation
 import Supabase
-import Auth
 
 @MainActor
 class SupabaseService: ObservableObject {
