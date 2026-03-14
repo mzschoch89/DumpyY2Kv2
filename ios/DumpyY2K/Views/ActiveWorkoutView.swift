@@ -161,7 +161,12 @@ struct ActiveWorkoutView: View {
                 ForEach(Array(session.exerciseLogs.enumerated()), id: \.element.id) { index, log in
                     let completed = isExerciseCompleted(log)
                     Button {
-                        withAnimation(.snappy) { selectedExerciseIndex = index }
+                        withAnimation(.snappy) {
+                            selectedExerciseIndex = index
+                            // Clear editing state when switching exercises
+                            editingWeight = [:]
+                            editingReps = [:]
+                        }
                     } label: {
                         VStack(spacing: 4) {
                             ZStack {
