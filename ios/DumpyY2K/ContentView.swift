@@ -48,12 +48,24 @@ struct ContentView: View {
             .tag(AppTab.social)
         }
         .tint(Y2K.turquoise)
-        .environment(\.colorScheme, .light) // Force light mode for consistent tab bar colors
+        .onAppear {
+            // Force tab bar appearance after view is created
+            DispatchQueue.main.async {
+                let scenes = UIApplication.shared.connectedScenes
+                if let windowScene = scenes.first as? UIWindowScene,
+                   let window = windowScene.windows.first,
+                   let tabBarController = window.rootViewController?.children.first(where: { $0 is UITabBarController }) as? UITabBarController {
+                    tabBarController.tabBar.unselectedItemTintColor = UIColor(Y2K.hotPink)
+                    tabBarController.tabBar.tintColor = UIColor(Y2K.turquoise)
+                } else {
+                    // Fallback: apply to all tab bars via appearance
+                    UITabBar.appearance().unselectedItemTintColor = UIColor(Y2K.hotPink)
+                }
+            }
+            viewModel.load()
+        }
         .fullScreenCover(isPresented: $showWorkout) {
             ActiveWorkoutView(viewModel: viewModel)
-        }
-        .onAppear {
-            viewModel.load()
         }
     }
 }
