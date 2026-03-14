@@ -188,7 +188,7 @@ struct WorkoutProgramData {
                 backup: Exercise(id: "banded_hip_thrust", name: "Banded Hip Thrust Off Bench", cue: "Band above knees, back on bench edge, drive hips up and squeeze", category: .bridge, isBackup: true)
             ),
             .dayB: (
-                primary: Exercise(id: "barbell_glute_bridge", name: "Barbell Glute Bridge", cue: "Back stays on the floor, drive through your heels, squeeze at the top", category: .bridge, isBackup: false),
+                primary: Exercise(id: "barbell_hip_thrust", name: "Barbell Hip Thrust", cue: "Back on bench, drive through your heels, squeeze glutes hard at the top", category: .bridge, isBackup: false),
                 backup: Exercise(id: "single_leg_bridge", name: "Single-Leg Glute Bridge", cue: "One foot on the ground, other leg straight up. Squeeze at top.", category: .bridge, isBackup: true)
             )
         ],
