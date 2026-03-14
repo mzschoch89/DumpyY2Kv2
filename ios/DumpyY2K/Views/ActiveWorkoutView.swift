@@ -59,7 +59,7 @@ struct ActiveWorkoutView: View {
                 }
             }
             .alert("Abort Workout?", isPresented: $showAbortConfirmation) {
-                Button("Abort", role: .destructive) {
+                Button("Confirm", role: .destructive) {
                     viewModel.cancelWorkout()
                     dismiss()
                 }
