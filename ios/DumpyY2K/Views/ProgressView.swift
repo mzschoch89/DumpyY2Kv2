@@ -179,23 +179,23 @@ struct ProgressTabView: View {
             }
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 16) {
-                // Row 1: Getting Started
-                MilestoneBadge(icon: "star.fill", title: "Glute Starter", howTo: "Complete your first workout to unlock this badge!", isUnlocked: viewModel.totalWorkouts >= 1)
-                MilestoneBadge(icon: "flame.fill", title: "On Fire", howTo: "Complete 3 workouts in a row without skipping.", isUnlocked: viewModel.currentStreak >= 3)
-                MilestoneBadge(icon: "bolt.fill", title: "Committed", howTo: "Complete 10 total workouts. You're building a habit!", isUnlocked: viewModel.totalWorkouts >= 10)
-                MilestoneBadge(icon: "trophy.fill", title: "Week Warrior", howTo: "Hit a 7-day workout streak. No days off!", isUnlocked: viewModel.currentStreak >= 7)
+                // Row 1: Early Wins (Weeks 1-3)
+                MilestoneBadge(icon: "star.fill", title: "First Rep", howTo: "Complete your first workout!", isUnlocked: viewModel.totalWorkouts >= 1)
+                MilestoneBadge(icon: "flame.fill", title: "On Fire", howTo: "Complete 3 workouts in a row.", isUnlocked: viewModel.currentStreak >= 3)
+                MilestoneBadge(icon: "bolt.fill", title: "Week 2 Done", howTo: "Complete 4 workouts (finish week 2).", isUnlocked: viewModel.totalWorkouts >= 4)
+                MilestoneBadge(icon: "trophy.fill", title: "PR Hunter", howTo: "Set your first personal record!", isUnlocked: viewModel.personalRecords.count >= 1)
                 
-                // Row 2: Leveling Up
-                MilestoneBadge(icon: "medal.fill", title: "PR Crusher", howTo: "Set 5 personal records. Keep pushing heavier!", isUnlocked: viewModel.personalRecords.count >= 5)
-                MilestoneBadge(icon: "dumbbell.fill", title: "Halfway There", howTo: "Reach Week 7 of the program. You're crushing it!", isUnlocked: viewModel.currentWeek >= 7)
-                MilestoneBadge(icon: "scalemass.fill", title: "Ton Club", howTo: "Lift a cumulative total of 1 ton (2000 lbs).", isUnlocked: viewModel.totalTonsLifted >= 1.0)
-                MilestoneBadge(icon: "figure.strengthtraining.traditional", title: "Iron Addict", howTo: "Complete 25 total workouts. This is your life now!", isUnlocked: viewModel.totalWorkouts >= 25)
+                // Row 2: Building Momentum (Weeks 4-8)
+                MilestoneBadge(icon: "medal.fill", title: "Month Strong", howTo: "Complete 8 workouts (one month in).", isUnlocked: viewModel.totalWorkouts >= 8)
+                MilestoneBadge(icon: "dumbbell.fill", title: "Halfway There", howTo: "Reach Week 7 of the program.", isUnlocked: viewModel.currentWeek >= 7)
+                MilestoneBadge(icon: "scalemass.fill", title: "10 Ton Club", howTo: "Lift 10 tons total (~2 weeks of workouts).", isUnlocked: viewModel.totalTonsLifted >= 10.0)
+                MilestoneBadge(icon: "figure.strengthtraining.traditional", title: "5 PRs", howTo: "Set 5 personal records. Getting stronger!", isUnlocked: viewModel.personalRecords.count >= 5)
                 
-                // Row 3: Elite Status
-                MilestoneBadge(icon: "hands.clap.fill", title: "10 PR Party", howTo: "Set 10 personal records. You're getting STRONG!", isUnlocked: viewModel.personalRecords.count >= 10)
-                MilestoneBadge(icon: "moon.stars.fill", title: "Consistency Queen", howTo: "Hit a 14-day streak. Two weeks straight!", isUnlocked: viewModel.currentStreak >= 14)
-                MilestoneBadge(icon: "sparkles", title: "5 Ton Titan", howTo: "Lift 5 tons total. You're moving serious weight!", isUnlocked: viewModel.totalTonsLifted >= 5.0)
-                MilestoneBadge(icon: "crown.fill", title: "Elite Glutes", howTo: "Complete all 13 weeks. You're a LEGEND! 👑", isUnlocked: viewModel.currentWeek > 13)
+                // Row 3: Elite Finisher (Weeks 9-12)
+                MilestoneBadge(icon: "hands.clap.fill", title: "20 Workouts", howTo: "Complete 20 workouts. Almost done!", isUnlocked: viewModel.totalWorkouts >= 20)
+                MilestoneBadge(icon: "moon.stars.fill", title: "50 Ton Titan", howTo: "Lift 50 tons total (~8 weeks of work).", isUnlocked: viewModel.totalTonsLifted >= 50.0)
+                MilestoneBadge(icon: "sparkles", title: "10 PRs", howTo: "Set 10 personal records. You're STRONG!", isUnlocked: viewModel.personalRecords.count >= 10)
+                MilestoneBadge(icon: "crown.fill", title: "Glute Queen", howTo: "Complete all 12 weeks. You're a LEGEND! 👑", isUnlocked: viewModel.currentWeek > 12)
             }
         }
     }
