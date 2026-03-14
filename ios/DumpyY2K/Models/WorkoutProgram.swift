@@ -180,7 +180,7 @@ struct WorkoutProgramData {
 
     static let mesocycles: [Mesocycle] = [
         Mesocycle(
-            id: "meso_1", name: "BUILD THAT BASE", weeks: [1, 2, 3, 4],
+            id: "meso_1", name: "BUILD THAT BASE", weeks: [1, 2],
             goal: "Find your working weights, get comfortable with every exercise, start building strength",
             effort: "casual",
             howToProgress: "When you can hit the top number of reps on all 3 sets, go up in weight next time.",
@@ -188,15 +188,15 @@ struct WorkoutProgramData {
             totalWorkingSets: 12
         ),
         Mesocycle(
-            id: "meso_2", name: "Turn It Up", weeks: [5, 6, 7, 8],
+            id: "meso_2", name: "Turn It Up", weeks: [3, 4, 5, 6, 7],
             goal: "More volume, heavier weights, start really challenging yourself",
             effort: "almost_to_failure",
-            howToProgress: "Increase weight 5-10% from weeks 1-4. Keep pushing for more reps or more weight every session.",
+            howToProgress: "Increase weight 5-10% from weeks 1-2. Keep pushing for more reps or more weight every session.",
             repRanges: [.squat: "8-10 per leg", .hinge: "8-10", .bridge: "10-12", .abduction: "15-20"],
             totalWorkingSets: 14
         ),
         Mesocycle(
-            id: "meso_3", name: "Go All Out", weeks: [9, 10, 11, 12],
+            id: "meso_3", name: "Go All Out", weeks: [8, 9, 10, 11, 12],
             goal: "Heaviest weights of the program, push for personal records on every exercise",
             effort: "to_failure on last set",
             howToProgress: "Push for new personal bests. If you hit the top of the rep range on all 4 sets, add weight next session.",
