@@ -19,7 +19,7 @@ struct AuthView: View {
                 
                 // Logo & Header
                 VStack(spacing: 16) {
-                    Image("AppIcon")
+                    Image("Logo")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 100, height: 100)
