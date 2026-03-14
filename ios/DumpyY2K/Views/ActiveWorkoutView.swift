@@ -133,8 +133,10 @@ struct ActiveWorkoutView: View {
                         } label: {
                             VStack(spacing: 4) {
                                 ZStack {
-                                    Image(systemName: log.category.icon)
-                                        .font(.caption)
+                                    Image(selectedExerciseIndex == index ? log.category.customIconActive : log.category.customIconInactive)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
                                     if completed {
                                         Image(systemName: "checkmark.circle.fill")
                                             .font(.system(size: 10))

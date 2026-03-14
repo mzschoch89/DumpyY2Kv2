@@ -26,6 +26,24 @@ nonisolated enum ExerciseCategory: String, CaseIterable, Codable, Sendable, Iden
         }
     }
 
+    var customIconActive: String {
+        switch self {
+        case .squat: "squat-white"
+        case .hinge: "hinge-white"
+        case .bridge: "bridge-white"
+        case .abduction: "abduction-white"
+        }
+    }
+
+    var customIconInactive: String {
+        switch self {
+        case .squat: "squat-turquoise"
+        case .hinge: "hinge-turquoise"
+        case .bridge: "bridge-turquoise"
+        case .abduction: "abduction-turquoise"
+        }
+    }
+
     var restSeconds: Int {
         switch self {
         case .squat, .hinge: 90
