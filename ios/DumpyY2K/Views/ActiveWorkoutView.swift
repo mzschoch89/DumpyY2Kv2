@@ -9,6 +9,7 @@ struct ActiveWorkoutView: View {
     @State private var editingWeight: [Int: String] = [:]
     @State private var editingReps: [Int: String] = [:]
     @State private var showWarmup: Bool = true
+    @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
         NavigationStack {
@@ -23,7 +24,9 @@ struct ActiveWorkoutView: View {
                     exerciseTabBar
                     exerciseContent
                     Spacer(minLength: 0)
-                    bottomActions
+                    if !isTextFieldFocused {
+                        bottomActions
+                    }
                 }
             }
             .sheet(isPresented: $showWarmup) {
@@ -268,7 +271,8 @@ struct ActiveWorkoutView: View {
                         let weight = Double(editingWeight[setIndex] ?? "") ?? setLog.weight
                         let reps = Int(editingReps[setIndex] ?? "") ?? setLog.reps
                         viewModel.completeSet(exerciseIndex: exerciseIndex, setIndex: setIndex, weight: weight, reps: reps)
-                    }
+                    },
+                    isTextFieldFocused: $isTextFieldFocused
                 )
             }
         }
@@ -460,6 +464,7 @@ struct SetRow: View {
     let onWeightChange: (String) -> Void
     let onRepsChange: (String) -> Void
     let onComplete: () -> Void
+    var isTextFieldFocused: FocusState<Bool>.Binding
 
     var body: some View {
         HStack(spacing: 10) {
@@ -485,6 +490,7 @@ struct SetRow: View {
             .padding(.vertical, 10)
             .background(Y2K.cream, in: RoundedRectangle(cornerRadius: 12))
             .disabled(isCompleted)
+            .focused(isTextFieldFocused)
 
             Text("lbs")
                 .font(.system(.caption, design: .rounded, weight: .medium))
@@ -501,6 +507,7 @@ struct SetRow: View {
             .padding(.vertical, 10)
             .background(Y2K.cream, in: RoundedRectangle(cornerRadius: 12))
             .disabled(isCompleted)
+            .focused(isTextFieldFocused)
 
             Text("reps")
                 .font(.system(.caption, design: .rounded, weight: .medium))
