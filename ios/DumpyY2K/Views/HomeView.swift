@@ -23,14 +23,13 @@ struct HomeView: View {
         HStack {
             Y2KHeader(prefix: "GLUTE", accent: "Gains!", emoji: "🍑")
             Spacer()
-            profileButton
+            settingsButton
         }
         .padding(.top, 8)
     }
 
-    private var profileButton: some View {
-        Button {
-        } label: {
+    private var settingsButton: some View {
+        NavigationLink(destination: SettingsView()) {
             Circle()
                 .fill(
                     LinearGradient(
@@ -45,7 +44,7 @@ struct HomeView: View {
                         .fill(.white)
                         .frame(width: 34, height: 34)
                         .overlay {
-                            Image(systemName: "person.fill")
+                            Image(systemName: "gearshape.fill")
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundStyle(Y2K.hotPink)
                         }
