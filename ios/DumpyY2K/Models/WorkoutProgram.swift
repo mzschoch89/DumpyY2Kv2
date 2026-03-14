@@ -109,6 +109,14 @@ nonisolated struct Exercise: Identifiable, Codable, Sendable, Hashable {
     let category: ExerciseCategory
     let isBackup: Bool
 
+    var iconWhite: String {
+        "\(id)-white"
+    }
+
+    var iconTurquoise: String {
+        "\(id)-turquoise"
+    }
+
     nonisolated static func == (lhs: Exercise, rhs: Exercise) -> Bool {
         lhs.id == rhs.id
     }
