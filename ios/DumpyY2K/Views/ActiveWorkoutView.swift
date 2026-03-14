@@ -123,54 +123,51 @@ struct ActiveWorkoutView: View {
     }
 
     private var exerciseTabBar: some View {
-        ScrollView(.horizontal) {
-            HStack(spacing: 10) {
-                if let session = viewModel.activeSession {
-                    ForEach(Array(session.exerciseLogs.enumerated()), id: \.element.id) { index, log in
-                        let completed = isExerciseCompleted(log)
-                        Button {
-                            withAnimation(.snappy) { selectedExerciseIndex = index }
-                        } label: {
-                            VStack(spacing: 4) {
-                                ZStack {
-                                    Image(selectedExerciseIndex == index ? log.category.customIconActive : log.category.customIconInactive)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 24, height: 24)
-                                    if completed {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .font(.system(size: 10))
-                                            .foregroundStyle(Y2K.limeGreen)
-                                            .offset(x: 10, y: -8)
-                                    }
+        HStack(spacing: 8) {
+            if let session = viewModel.activeSession {
+                ForEach(Array(session.exerciseLogs.enumerated()), id: \.element.id) { index, log in
+                    let completed = isExerciseCompleted(log)
+                    Button {
+                        withAnimation(.snappy) { selectedExerciseIndex = index }
+                    } label: {
+                        VStack(spacing: 4) {
+                            ZStack {
+                                Image(selectedExerciseIndex == index ? log.category.customIconActive : log.category.customIconInactive)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24, height: 24)
+                                if completed {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 10))
+                                        .foregroundStyle(Y2K.limeGreen)
+                                        .offset(x: 10, y: -8)
                                 }
-                                Text(log.category.displayName.uppercased())
-                                    .font(.system(.caption2, design: .rounded, weight: .bold))
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.8)
                             }
-                            .foregroundStyle(selectedExerciseIndex == index ? .white : (completed ? Y2K.limeGreen : Y2K.turquoise))
-                            .frame(width: 80)
-                            .padding(.vertical, 12)
-                            .background {
-                                if selectedExerciseIndex == index {
-                                    Capsule().fill(
-                                        LinearGradient(colors: [Y2K.hotPink, Y2K.bubblegumPink], startPoint: .leading, endPoint: .trailing)
-                                    )
-                                } else if completed {
-                                    Capsule().fill(Y2K.limeGreen.opacity(0.15))
-                                        .overlay(Capsule().strokeBorder(Y2K.limeGreen, lineWidth: 1.5))
-                                } else {
-                                    Capsule().fill(.white.opacity(0.9))
-                                }
+                            Text(log.category.displayName.uppercased())
+                                .font(.system(.caption2, design: .rounded, weight: .bold))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                        }
+                        .foregroundStyle(selectedExerciseIndex == index ? .white : (completed ? Y2K.limeGreen : Y2K.turquoise))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                        .background {
+                            if selectedExerciseIndex == index {
+                                Capsule().fill(
+                                    LinearGradient(colors: [Y2K.hotPink, Y2K.bubblegumPink], startPoint: .leading, endPoint: .trailing)
+                                )
+                            } else if completed {
+                                Capsule().fill(Y2K.limeGreen.opacity(0.15))
+                                    .overlay(Capsule().strokeBorder(Y2K.limeGreen, lineWidth: 1.5))
+                            } else {
+                                Capsule().fill(.white.opacity(0.9))
                             }
                         }
                     }
                 }
             }
         }
-        .contentMargins(.horizontal, 16)
-        .scrollIndicators(.hidden)
+        .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
 
