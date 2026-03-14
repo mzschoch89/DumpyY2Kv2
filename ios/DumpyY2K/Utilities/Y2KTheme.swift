@@ -154,7 +154,7 @@ struct Y2KHeader: View {
     var body: some View {
         HStack(alignment: .bottom, spacing: 0) {
             Text(prefix + " ")
-                .font(.system(.title, design: .rounded, weight: .black))
+                .font(.system(size: 38, weight: .black, design: .rounded))
                 .foregroundStyle(Y2K.hotPink)
             Text(accent)
                 .font(.system(.title, design: .serif, weight: .bold))
