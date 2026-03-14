@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct SocialView: View {
+    @AppStorage("hasAppliedToJoin") private var hasApplied = false
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 32) {
@@ -48,22 +50,28 @@ struct SocialView: View {
                     .lineSpacing(4)
 
                 VStack(spacing: 8) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "cursorarrow.click.2")
-                            .font(.caption)
-                        Text("APPLY TO JOIN")
-                            .font(.system(.caption, design: .rounded, weight: .black))
+                    Button {
+                        hasApplied = true
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: hasApplied ? "checkmark.circle.fill" : "cursorarrow.click.2")
+                                .font(.caption)
+                            Text(hasApplied ? "APPLIED" : "APPLY TO JOIN")
+                                .font(.system(.caption, design: .rounded, weight: .black))
+                        }
+                        .foregroundStyle(Y2K.deepPurple)
+                        .padding(.horizontal, 22)
+                        .padding(.vertical, 12)
+                        .background(.white.opacity(0.85), in: Capsule())
                     }
-                    .foregroundStyle(Y2K.deepGreen)
-                    .padding(.horizontal, 22)
-                    .padding(.vertical, 12)
-                    .background(.white.opacity(0.85), in: Capsule())
+                    .disabled(hasApplied)
                     
                     Text("This will only share your email.\nYou can later choose a name to join the community.")
-                        .font(.system(.caption2, design: .rounded, weight: .regular))
+                        .font(.system(.caption, design: .rounded, weight: .light))
                         .foregroundStyle(Y2K.lavender)
                         .multilineTextAlignment(.center)
-                        .lineSpacing(2)
+                        .lineSpacing(3)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             .padding(32)
@@ -81,7 +89,7 @@ struct SocialView: View {
     private var featuresPreview: some View {
         VStack(spacing: 14) {
             UpcomingFeatureRow(icon: "trophy.fill", title: "WEEKLY LEADERS", detail: "Compete with friends on the leaderboard", borderColor: Y2K.teal)
-            UpcomingFeatureRow(icon: "bubble.left.fill", title: "GLUTE CLUB FEED", detail: "Share your workout wins and activity with your community.", borderColor: Y2K.deepPurple)
+            UpcomingFeatureRow(icon: "bubble.left.fill", title: "GLUTE CLUB FEED", detail: "Share workouts and PRs with your community", borderColor: Y2K.deepPurple)
             UpcomingFeatureRow(icon: "camera.fill", title: "PROGRESS PICS", detail: "Track your visual transformation journey", borderColor: Y2K.hotPink)
         }
     }
