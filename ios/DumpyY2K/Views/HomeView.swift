@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     let viewModel: WorkoutViewModel
     @Binding var showWorkout: Bool
+    @State private var showCalendar = false
 
     var body: some View {
         ScrollView {
@@ -146,7 +147,15 @@ struct HomeView: View {
 
     private var quickStatsRow: some View {
         HStack(spacing: 12) {
-            StatBubble(value: "\(viewModel.totalWorkouts)", label: "WORKOUTS", icon: "dumbbell.fill", accentColor: Y2K.hotPink)
+            Button {
+                showCalendar = true
+            } label: {
+                StatBubble(value: "\(viewModel.totalWorkouts)", label: "WORKOUTS", icon: "dumbbell.fill", accentColor: Y2K.hotPink)
+            }
+            .navigationDestination(isPresented: $showCalendar) {
+                WorkoutCalendarView(viewModel: viewModel)
+            }
+            
             StatBubble(value: String(format: "%.1f", viewModel.totalTonsLifted), label: "TONS LIFTED", icon: "scalemass.fill", accentColor: Y2K.bubblegumPink)
             StatBubble(value: "\(viewModel.personalRecords.count)", label: "PRs", icon: "trophy.fill", accentColor: Y2K.lavender)
         }

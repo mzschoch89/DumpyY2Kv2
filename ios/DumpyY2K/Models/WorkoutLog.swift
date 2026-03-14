@@ -39,8 +39,9 @@ nonisolated struct WorkoutSession: Identifiable, Codable, Sendable {
     var exerciseLogs: [ExerciseLog]
     var isCompleted: Bool
     var durationSeconds: Int
+    var prsSet: [String] // Exercise names where PR was set
 
-    init(id: UUID = UUID(), date: Date = .now, week: Int, day: WorkoutDay, mesocycleId: String, exerciseLogs: [ExerciseLog] = [], isCompleted: Bool = false, durationSeconds: Int = 0) {
+    init(id: UUID = UUID(), date: Date = .now, week: Int, day: WorkoutDay, mesocycleId: String, exerciseLogs: [ExerciseLog] = [], isCompleted: Bool = false, durationSeconds: Int = 0, prsSet: [String] = []) {
         self.id = id
         self.date = date
         self.week = week
@@ -49,7 +50,50 @@ nonisolated struct WorkoutSession: Identifiable, Codable, Sendable {
         self.exerciseLogs = exerciseLogs
         self.isCompleted = isCompleted
         self.durationSeconds = durationSeconds
+        self.prsSet = prsSet
     }
+    
+    // Computed properties for calendar view
+    var workoutName: String {
+        "Day \(day.rawValue.prefix(1).uppercased())"
+    }
+    
+    var exerciseCount: Int {
+        exerciseLogs.count
+    }
+    
+    var prCount: Int {
+        prsSet.count
+    }
+    
+    var totalTonnage: Double {
+        exerciseLogs.reduce(0) { total, log in
+            total + log.sets.filter(\.isCompleted).reduce(0) { $0 + ($1.weight * Double($1.reps)) }
+        }
+    }
+    
+    var exercises: [CompletedExercise] {
+        exerciseLogs.map { log in
+            let completedSets = log.sets.filter(\.isCompleted)
+            let maxWeight = completedSets.map(\.weight).max() ?? 0
+            let avgReps = completedSets.isEmpty ? 0 : completedSets.map(\.reps).reduce(0, +) / completedSets.count
+            return CompletedExercise(
+                name: log.exerciseName,
+                sets: completedSets.count,
+                reps: avgReps,
+                weight: maxWeight,
+                isPR: prsSet.contains(log.exerciseName)
+            )
+        }
+    }
+}
+
+nonisolated struct CompletedExercise: Sendable {
+    let name: String
+    let sets: Int
+    let reps: Int
+    let weight: Double
+    let isPR: Bool
 }
 
 nonisolated struct PersonalRecord: Identifiable, Codable, Sendable {

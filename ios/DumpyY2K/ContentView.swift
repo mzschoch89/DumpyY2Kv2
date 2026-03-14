@@ -22,7 +22,7 @@ struct ContentView: View {
                 HomeView(viewModel: viewModel, showWorkout: $showWorkout)
             }
             .tabItem {
-                Label("HOME", systemImage: "sparkles")
+                Label("GYM", systemImage: "sparkles")
                     .environment(\.symbolVariants, selectedTab == 0 ? .fill : .none)
             }
             .tag(0)
