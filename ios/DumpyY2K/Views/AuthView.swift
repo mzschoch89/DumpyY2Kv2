@@ -66,6 +66,9 @@ struct AuthView: View {
                                     .font(.system(.title3, design: .rounded, weight: .semibold))
                                     .keyboardType(.phonePad)
                                     .foregroundStyle(Y2K.deepPurple)
+                                    .onChange(of: phoneNumber) { _, newValue in
+                                        phoneNumber = formatPhoneDisplay(newValue)
+                                    }
                             }
                             .padding(16)
                             .background(.white, in: RoundedRectangle(cornerRadius: 16))
@@ -138,7 +141,7 @@ struct AuthView: View {
                                 }
                             }
                             
-                            Text("Sent to \(phoneNumber)")
+                            Text("Sent to \(formatPhoneDisplay(phoneNumber))")
                                 .font(.system(.caption2, design: .rounded))
                                 .foregroundStyle(Y2K.deepPurple.opacity(0.6))
                             
@@ -285,6 +288,31 @@ struct AuthView: View {
             return "+\(digits)"
         }
         return "+1\(digits)"
+    }
+    
+    private func formatPhoneDisplay(_ number: String) -> String {
+        let digits = number.filter { $0.isNumber }
+        
+        // Handle up to 10 digits (US phone number)
+        let limited = String(digits.prefix(10))
+        
+        switch limited.count {
+        case 0:
+            return ""
+        case 1...3:
+            return "(\(limited)"
+        case 4...6:
+            let areaCode = limited.prefix(3)
+            let middle = limited.dropFirst(3)
+            return "(\(areaCode)) \(middle)"
+        case 7...10:
+            let areaCode = limited.prefix(3)
+            let middle = limited.dropFirst(3).prefix(3)
+            let last = limited.dropFirst(6)
+            return "(\(areaCode)) \(middle)-\(last)"
+        default:
+            return limited
+        }
     }
 }
 
