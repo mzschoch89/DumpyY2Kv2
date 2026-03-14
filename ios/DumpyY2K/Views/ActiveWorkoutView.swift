@@ -386,7 +386,19 @@ struct ActiveWorkoutView: View {
             }
         }
         .padding(.horizontal, 16)
+        .padding(.top, 16)
         .padding(.bottom, 12)
+        .background {
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        colors: [Y2K.cream.opacity(0), Y2K.cream],
+                        startPoint: .top,
+                        endPoint: UnitPoint(x: 0.5, y: 0.3)
+                    )
+                )
+                .ignoresSafeArea()
+        }
     }
 
     private var warmupSheet: some View {
