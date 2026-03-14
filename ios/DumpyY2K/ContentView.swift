@@ -6,73 +6,104 @@ struct ContentView: View {
     @State private var showWorkout: Bool = false
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            NavigationStack {
-                HomeView(viewModel: viewModel, showWorkout: $showWorkout)
-            }
-            .tabItem {
-                Image(systemName: "sparkles")
-                    .renderingMode(.template)
-                Text("HOME")
-            }
-            .tag(AppTab.gym)
-
-            NavigationStack {
-                PlansView(viewModel: viewModel)
-            }
-            .tabItem {
-                Image(systemName: "square.grid.2x2.fill")
-                    .renderingMode(.template)
-                Text("PLANS")
-            }
-            .tag(AppTab.plans)
-
-            NavigationStack {
-                ProgressTabView(viewModel: viewModel)
-            }
-            .tabItem {
-                Image(systemName: "camera.fill")
-                    .renderingMode(.template)
-                Text("PROGRESS")
-            }
-            .tag(AppTab.gains)
-
-            NavigationStack {
-                SocialView()
-            }
-            .tabItem {
-                Image(systemName: "person.fill")
-                    .renderingMode(.template)
-                Text("SOCIAL")
-            }
-            .tag(AppTab.social)
-        }
-        .tint(Y2K.turquoise)
-        .onAppear {
-            // Force tab bar appearance after view is created
-            DispatchQueue.main.async {
-                let scenes = UIApplication.shared.connectedScenes
-                if let windowScene = scenes.first as? UIWindowScene,
-                   let window = windowScene.windows.first,
-                   let tabBarController = window.rootViewController?.children.first(where: { $0 is UITabBarController }) as? UITabBarController {
-                    tabBarController.tabBar.unselectedItemTintColor = UIColor(Y2K.hotPink)
-                    tabBarController.tabBar.tintColor = UIColor(Y2K.turquoise)
-                } else {
-                    // Fallback: apply to all tab bars via appearance
-                    UITabBar.appearance().unselectedItemTintColor = UIColor(Y2K.hotPink)
+        VStack(spacing: 0) {
+            // Content area
+            Group {
+                switch selectedTab {
+                case .gym:
+                    NavigationStack {
+                        HomeView(viewModel: viewModel, showWorkout: $showWorkout)
+                    }
+                case .plans:
+                    NavigationStack {
+                        PlansView(viewModel: viewModel)
+                    }
+                case .gains:
+                    NavigationStack {
+                        ProgressTabView(viewModel: viewModel)
+                    }
+                case .social:
+                    NavigationStack {
+                        SocialView()
+                    }
                 }
             }
-            viewModel.load()
+
+            // Custom Tab Bar
+            CustomTabBar(selectedTab: $selectedTab)
         }
+        .ignoresSafeArea(.keyboard)
         .fullScreenCover(isPresented: $showWorkout) {
             ActiveWorkoutView(viewModel: viewModel)
+        }
+        .onAppear {
+            viewModel.load()
         }
     }
 }
 
-nonisolated enum AppTab: Hashable, Sendable {
+struct CustomTabBar: View {
+    @Binding var selectedTab: AppTab
+
+    var body: some View {
+        HStack {
+            ForEach(AppTab.allCases, id: \.self) { tab in
+                Spacer()
+                TabBarButton(tab: tab, isSelected: selectedTab == tab) {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        selectedTab = tab
+                    }
+                }
+                Spacer()
+            }
+        }
+        .padding(.top, 10)
+        .padding(.bottom, 24)
+        .background(Color(red: 0.98, green: 0.95, blue: 0.96))
+    }
+}
+
+struct TabBarButton: View {
+    let tab: AppTab
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 4) {
+                Image(systemName: tab.icon)
+                    .font(.system(size: 22))
+                    .foregroundStyle(isSelected ? Y2K.turquoise : Y2K.hotPink)
+
+                Text(tab.title)
+                    .font(.system(size: 10, weight: isSelected ? .heavy : .bold))
+                    .foregroundStyle(isSelected ? Y2K.turquoise : Y2K.hotPink)
+            }
+        }
+    }
+}
+
+enum AppTab: Hashable, CaseIterable {
     case gym
     case plans
     case gains
     case social
+
+    var icon: String {
+        switch self {
+        case .gym: "sparkles"
+        case .plans: "square.grid.2x2.fill"
+        case .gains: "camera.fill"
+        case .social: "person.fill"
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .gym: "HOME"
+        case .plans: "PLANS"
+        case .gains: "PROGRESS"
+        case .social: "SOCIAL"
+        }
+    }
 }
