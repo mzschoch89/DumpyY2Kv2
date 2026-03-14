@@ -227,7 +227,21 @@ struct AuthView: View {
         }
     }
     
+    // Demo phone number for App Store review bypass
+    private let demoPhoneNumber = "8881234567"
+    private let demoOTPCode = "123456"
+    
     private func sendOTP() {
+        let digits = phoneNumber.filter { $0.isNumber }
+        
+        // App Store review bypass
+        if digits == demoPhoneNumber || digits == "1\(demoPhoneNumber)" {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                showOTPField = true
+            }
+            return
+        }
+        
         isLoading = true
         Task {
             do {
@@ -244,6 +258,14 @@ struct AuthView: View {
     }
     
     private func verifyOTP() {
+        let digits = phoneNumber.filter { $0.isNumber }
+        
+        // App Store review bypass
+        if (digits == demoPhoneNumber || digits == "1\(demoPhoneNumber)") && otpCode == demoOTPCode {
+            onAuthenticated()
+            return
+        }
+        
         isLoading = true
         Task {
             do {
