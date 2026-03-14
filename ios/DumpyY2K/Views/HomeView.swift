@@ -154,11 +154,12 @@ struct HomeView: View {
 
     private var streakCard: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .center, spacing: 6) {
                 Text("CURRENT STREAK")
                     .font(.system(.subheadline, design: .rounded, weight: .black))
                     .foregroundStyle(Y2K.hotPink)
                     .tracking(1)
+                    .frame(maxWidth: .infinity)
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text("\(viewModel.currentStreak)")
                         .font(.system(size: 44, weight: .black, design: .rounded))
