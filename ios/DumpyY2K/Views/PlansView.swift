@@ -313,8 +313,10 @@ struct MesocycleDetailSheet: View {
                 if let pair = WorkoutProgramData.exercises[category]?[day] {
                     VStack(alignment: .leading, spacing: 6) {
                         HStack {
-                            Image(systemName: category.icon)
-                                .foregroundStyle(Y2K.hotPink)
+                            Image(pair.primary.iconTurquoise)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
                             Text(pair.primary.name)
                                 .font(.system(.subheadline, design: .rounded, weight: .bold))
                                 .foregroundStyle(Y2K.turquoise)
