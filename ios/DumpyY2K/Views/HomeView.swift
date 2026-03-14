@@ -169,8 +169,8 @@ struct HomeView: View {
                 }
             }
             Text("🔥")
-                .font(.system(size: 50))
-                .padding(.leading, -20)
+                .font(.system(size: 35))
+                .padding(.leading, -12)
         }
         .padding(20)
         .background {
