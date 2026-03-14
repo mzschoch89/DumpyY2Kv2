@@ -376,6 +376,10 @@ struct EmailEditSheet: View {
                 
                 Button {
                     email = editedEmail
+                    // Save to Supabase
+                    Task {
+                        try? await SupabaseService.shared.updateUserEmail(email: editedEmail)
+                    }
                     dismiss()
                 } label: {
                     Text("SAVE")

@@ -36,6 +36,35 @@ class SupabaseService {
         currentUser != nil
     }
     
+    // MARK: - User Profile
+    
+    func updateUserEmail(email: String) async throws {
+        guard let userId = currentUser?.id else { return }
+        
+        try await client
+            .from("user_profiles")
+            .upsert([
+                "id": userId.uuidString,
+                "email": email,
+                "updated_at": ISO8601DateFormatter().string(from: Date())
+            ])
+            .execute()
+    }
+    
+    func getUserProfile() async throws -> UserProfile? {
+        guard let userId = currentUser?.id else { return nil }
+        
+        let response: [UserProfile] = try await client
+            .from("user_profiles")
+            .select()
+            .eq("id", value: userId.uuidString)
+            .limit(1)
+            .execute()
+            .value
+        
+        return response.first
+    }
+    
     // MARK: - Club Applications
     
     func submitClubApplication(email: String) async throws {
@@ -64,6 +93,20 @@ class SupabaseService {
 }
 
 // MARK: - Models
+
+struct UserProfile: Codable {
+    let id: String
+    var email: String?
+    var phone: String?
+    var updatedAt: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case email
+        case phone
+        case updatedAt = "updated_at"
+    }
+}
 
 struct ClubApplication: Codable {
     var id: UUID?
