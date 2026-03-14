@@ -57,9 +57,41 @@ struct CustomTabBar: View {
                 Spacer()
             }
         }
-        .padding(.top, 10)
-        .padding(.bottom, 24)
-        .background(Color(red: 0.98, green: 0.95, blue: 0.96))
+        .padding(.top, 12)
+        .padding(.bottom, 28)
+        .background {
+            // Glassmorphism effect
+            ZStack {
+                // Blur background
+                Rectangle()
+                    .fill(.ultraThinMaterial)
+
+                // Gradient overlay for Y2K vibe
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.98, green: 0.95, blue: 0.96).opacity(0.8),
+                        Color(red: 1.0, green: 0.92, blue: 0.95).opacity(0.6)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+
+                // Top border shine
+                VStack {
+                    Rectangle()
+                        .fill(
+                            LinearGradient(
+                                colors: [.white.opacity(0.6), .white.opacity(0.1)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                        .frame(height: 1)
+                    Spacer()
+                }
+            }
+        }
+        .shadow(color: Y2K.hotPink.opacity(0.1), radius: 20, y: -10)
     }
 }
 
