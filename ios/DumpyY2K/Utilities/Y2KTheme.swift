@@ -156,7 +156,7 @@ struct Y2KHeader: View {
             Text(prefix + " ")
                 .font(.system(size: 38, weight: .black, design: .rounded))
                 .foregroundStyle(Y2K.hotPink)
-                .baselineOffset(-6)
+                .offset(y: 8)
             Text(accent)
                 .font(.system(.title, design: .serif, weight: .bold))
                 .italic()
