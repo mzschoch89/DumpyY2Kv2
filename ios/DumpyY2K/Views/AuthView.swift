@@ -7,6 +7,7 @@ struct AuthView: View {
     @State private var showOTPField = false
     @State private var errorMessage = ""
     @State private var showError = false
+    @State private var isPulsing = false
     
     var onAuthenticated: () -> Void
     
@@ -22,8 +23,10 @@ struct AuthView: View {
                     Image("Logo")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .clipShape(RoundedRectangle(cornerRadius: 22))
+                        .frame(width: 135, height: 135)
+                        .scaleEffect(isPulsing ? 1.08 : 1.0)
+                        .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isPulsing)
+                        .onAppear { isPulsing = true }
                     
                     VStack(spacing: 6) {
                         HStack(spacing: 0) {
