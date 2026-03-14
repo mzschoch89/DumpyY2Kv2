@@ -1,15 +1,9 @@
 import SwiftUI
 
-@main
-struct DumpyY2KApp: App {
-    init() {
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         configureTabBarAppearance()
-    }
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+        return true
     }
 
     private func configureTabBarAppearance() {
@@ -30,16 +24,35 @@ struct DumpyY2KApp: App {
         ]
 
         // Configure all layout appearances
-        for itemAppearance in [appearance.stackedLayoutAppearance, appearance.inlineLayoutAppearance, appearance.compactInlineLayoutAppearance] {
-            itemAppearance.normal.iconColor = pink
-            itemAppearance.normal.titleTextAttributes = normalAttributes
-            itemAppearance.selected.iconColor = turquoise
-            itemAppearance.selected.titleTextAttributes = selectedAttributes
-        }
+        appearance.stackedLayoutAppearance.normal.iconColor = pink
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = normalAttributes
+        appearance.stackedLayoutAppearance.selected.iconColor = turquoise
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = selectedAttributes
+
+        appearance.inlineLayoutAppearance.normal.iconColor = pink
+        appearance.inlineLayoutAppearance.normal.titleTextAttributes = normalAttributes
+        appearance.inlineLayoutAppearance.selected.iconColor = turquoise
+        appearance.inlineLayoutAppearance.selected.titleTextAttributes = selectedAttributes
+
+        appearance.compactInlineLayoutAppearance.normal.iconColor = pink
+        appearance.compactInlineLayoutAppearance.normal.titleTextAttributes = normalAttributes
+        appearance.compactInlineLayoutAppearance.selected.iconColor = turquoise
+        appearance.compactInlineLayoutAppearance.selected.titleTextAttributes = selectedAttributes
 
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
         UITabBar.appearance().unselectedItemTintColor = pink
         UITabBar.appearance().tintColor = turquoise
+    }
+}
+
+@main
+struct DumpyY2KApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
     }
 }
