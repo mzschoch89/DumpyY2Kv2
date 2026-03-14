@@ -4,8 +4,19 @@ struct ContentView: View {
     @State private var viewModel = WorkoutViewModel()
     @State private var selectedTab: Int = 0
     @State private var showWorkout: Bool = false
+    @AppStorage("isAuthenticated") private var isAuthenticated = false
 
     var body: some View {
+        if !isAuthenticated {
+            AuthView {
+                isAuthenticated = true
+            }
+        } else {
+            mainContent
+        }
+    }
+    
+    private var mainContent: some View {
         TabView(selection: $selectedTab) {
             NavigationStack {
                 HomeView(viewModel: viewModel, showWorkout: $showWorkout)
@@ -51,4 +62,8 @@ struct ContentView: View {
             ActiveWorkoutView(viewModel: viewModel)
         }
     }
+}
+
+#Preview {
+    ContentView()
 }

@@ -1,5 +1,6 @@
 import Foundation
 import Supabase
+import Auth
 
 @MainActor
 class SupabaseService: ObservableObject {
@@ -12,6 +13,28 @@ class SupabaseService: ObservableObject {
             supabaseURL: URL(string: "https://sfrmmnucqagjivjkpkvw.supabase.co")!,
             supabaseKey: "sb_publishable_e8xIjWbwpeY2DXlcqcAlug_D7IlY_nZ"
         )
+    }
+    
+    // MARK: - Phone Auth
+    
+    func sendOTP(phone: String) async throws {
+        try await client.auth.signInWithOTP(phone: phone)
+    }
+    
+    func verifyOTP(phone: String, code: String) async throws {
+        try await client.auth.verifyOTP(phone: phone, token: code, type: .sms)
+    }
+    
+    func signOut() async throws {
+        try await client.auth.signOut()
+    }
+    
+    var currentUser: User? {
+        client.auth.currentUser
+    }
+    
+    var isAuthenticated: Bool {
+        currentUser != nil
     }
     
     // MARK: - Club Applications
