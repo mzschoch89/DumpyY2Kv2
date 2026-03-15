@@ -11,9 +11,12 @@ struct ActiveWorkoutView: View {
     @State private var editingReps: [String: String] = [:]
     @State private var showWarmup: Bool = false
     @State private var keyboardWarmedUp: Bool = false
-    @State private var focusedSetKey: String? = nil
-    @FocusState private var isTextFieldFocused: Bool
+    @FocusState private var focusedField: String?
     @FocusState private var hiddenFieldFocused: Bool
+    
+    private var isTextFieldFocused: Bool {
+        focusedField != nil
+    }
     
     private var allSetsCompleted: Bool {
         guard let session = viewModel.activeSession else { return false }
@@ -264,17 +267,14 @@ struct ActiveWorkoutView: View {
                     .padding(.bottom, 350) // Extra padding so last row can scroll above keyboard
                 }
                 .scrollDismissesKeyboard(.interactively)
-                .onTapGesture {
-                    isTextFieldFocused = false
-                    focusedSetKey = nil
-                }
-                .onChange(of: focusedSetKey) { _, newKey in
-                    if let key = newKey {
+                .onChange(of: focusedField) { _, newField in
+                    if let field = newField {
+                        // Extract the row key (e.g., "0-2-weight" -> "0-2")
+                        let rowKey = field.components(separatedBy: "-").prefix(2).joined(separator: "-")
                         // Delay to let keyboard animate up first
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             withAnimation(.easeOut(duration: 0.3)) {
-                                // Anchor at 0.3 = 30% from top, keeps row visible above keyboard
-                                proxy.scrollTo(key, anchor: UnitPoint(x: 0.5, y: 0.3))
+                                proxy.scrollTo(rowKey, anchor: UnitPoint(x: 0.5, y: 0.3))
                             }
                         }
                     }
@@ -368,9 +368,8 @@ struct ActiveWorkoutView: View {
                             viewModel.completeSet(exerciseIndex: exerciseIndex, setIndex: setIndex, weight: weight, reps: reps)
                         }
                     },
-                    isTextFieldFocused: $isTextFieldFocused,
-                    rowKey: key,
-                    onFocus: { focusedSetKey = key }
+                    focusedField: $focusedField,
+                    rowKey: key
                 )
                 .id(key)
             }
@@ -586,9 +585,11 @@ struct SetRow: View {
     let onWeightChange: (String) -> Void
     let onRepsChange: (String) -> Void
     let onToggleComplete: () -> Void
-    var isTextFieldFocused: FocusState<Bool>.Binding
+    var focusedField: FocusState<String?>.Binding
     let rowKey: String
-    let onFocus: () -> Void
+    
+    private var weightFieldKey: String { "\(rowKey)-weight" }
+    private var repsFieldKey: String { "\(rowKey)-reps" }
 
     var body: some View {
         HStack(spacing: 10) {
@@ -617,8 +618,7 @@ struct SetRow: View {
             .background(Y2K.cream, in: RoundedRectangle(cornerRadius: 12))
             .contentShape(Rectangle())
             .disabled(isCompleted)
-            .focused(isTextFieldFocused)
-            .onTapGesture { onFocus() }
+            .focused(focusedField, equals: weightFieldKey)
 
             Text("lbs")
                 .font(.system(.caption, design: .rounded, weight: .medium))
@@ -638,8 +638,7 @@ struct SetRow: View {
             .background(Y2K.cream, in: RoundedRectangle(cornerRadius: 12))
             .contentShape(Rectangle())
             .disabled(isCompleted)
-            .focused(isTextFieldFocused)
-            .onTapGesture { onFocus() }
+            .focused(focusedField, equals: repsFieldKey)
 
             Text("reps")
                 .font(.system(.caption, design: .rounded, weight: .medium))
