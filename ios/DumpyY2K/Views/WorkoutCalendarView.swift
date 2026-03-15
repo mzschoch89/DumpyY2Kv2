@@ -4,7 +4,6 @@ struct WorkoutCalendarView: View {
     let viewModel: WorkoutViewModel
     @State private var selectedMonth = Date()
     @State private var selectedSession: WorkoutSession?
-    @State private var showSessionDetail = false
     
     private let calendar = Calendar.current
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
@@ -22,11 +21,9 @@ struct WorkoutCalendarView: View {
         }
         .background { Y2KBackgroundGradient() }
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showSessionDetail) {
-            if let session = selectedSession {
-                WorkoutDetailSheet(session: session, viewModel: viewModel)
-                    .presentationDetents([.medium, .large])
-            }
+        .sheet(item: $selectedSession) { session in
+            WorkoutDetailSheet(session: session, viewModel: viewModel)
+                .presentationDetents([.medium, .large])
         }
     }
     
@@ -99,12 +96,9 @@ struct WorkoutCalendarView: View {
                             onTap: {
                                 print("=== DAY TAPPED ===")
                                 print("Date: \(date)")
-                                print("Has workout: \(hasWorkout(on: date))")
                                 if let session = getSession(for: date) {
                                     print("Found session: \(session.id)")
                                     selectedSession = session
-                                    showSessionDetail = true
-                                    print("showSessionDetail set to: \(showSessionDetail)")
                                 } else {
                                     print("NO SESSION FOUND for date")
                                 }
