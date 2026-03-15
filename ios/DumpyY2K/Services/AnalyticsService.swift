@@ -11,8 +11,8 @@ class AnalyticsService: NSObject {
     private let telemetryDeckAppID = "A772EA61-6E34-4881-883F-D5982F651532"
     
     // AppsFlyer - get from https://hq.appsflyer.com
-    private let appsFlyerDevKey = "YOUR_APPSFLYER_DEV_KEY"
-    private let appsFlyerAppID = "YOUR_APPLE_APP_ID" // Numeric App Store ID
+    private let appsFlyerDevKey = "BVcP3QEwr7xhitYs4teU8W"
+    private let appsFlyerAppID = "YOUR_APPLE_APP_ID" // Numeric App Store ID - get from App Store Connect
     
     private override init() {
         super.init()
