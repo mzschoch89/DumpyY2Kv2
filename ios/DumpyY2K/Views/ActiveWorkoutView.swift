@@ -612,13 +612,18 @@ struct SetRow: View {
             .foregroundStyle(Y2K.turquoise)
             .multilineTextAlignment(.center)
             .keyboardType(.decimalPad)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 12)
-            .frame(minHeight: 44)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 14)
+            .frame(minWidth: 70, minHeight: 48)
             .background(Y2K.cream, in: RoundedRectangle(cornerRadius: 12))
-            .contentShape(Rectangle())
+            .contentShape(RoundedRectangle(cornerRadius: 12))
             .disabled(isCompleted)
             .focused(focusedField, equals: weightFieldKey)
+            .onTapGesture {
+                if !isCompleted {
+                    focusedField.wrappedValue = weightFieldKey
+                }
+            }
 
             Text("lbs")
                 .font(.system(.caption, design: .rounded, weight: .medium))
@@ -632,13 +637,18 @@ struct SetRow: View {
             .foregroundStyle(Y2K.turquoise)
             .multilineTextAlignment(.center)
             .keyboardType(.numberPad)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 12)
-            .frame(minHeight: 44)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 14)
+            .frame(minWidth: 70, minHeight: 48)
             .background(Y2K.cream, in: RoundedRectangle(cornerRadius: 12))
-            .contentShape(Rectangle())
+            .contentShape(RoundedRectangle(cornerRadius: 12))
             .disabled(isCompleted)
             .focused(focusedField, equals: repsFieldKey)
+            .onTapGesture {
+                if !isCompleted {
+                    focusedField.wrappedValue = repsFieldKey
+                }
+            }
 
             Text("reps")
                 .font(.system(.caption, design: .rounded, weight: .medium))
