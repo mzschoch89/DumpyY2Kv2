@@ -44,7 +44,7 @@ struct ContentView: View {
             .tag(2)
 
             NavigationStack {
-                SocialView()
+                SocialView(viewModel: viewModel)
             }
             .tabItem {
                 Label("SOCIAL", systemImage: "person.fill")

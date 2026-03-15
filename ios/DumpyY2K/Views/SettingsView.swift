@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SettingsView: View {
+    let viewModel: WorkoutViewModel
     @State private var showDeleteConfirmation = false
     @State private var showLogoutConfirmation = false
     @State private var showEmailSheet = false
@@ -42,11 +43,17 @@ struct SettingsView: View {
             userPhone = ""
             UserDefaults.standard.removeObject(forKey: "hasAppliedToJoin")
             
-            // Clear workout data
+            // Clear workout data from UserDefaults
             UserDefaults.standard.removeObject(forKey: "completedSessions")
             UserDefaults.standard.removeObject(forKey: "personalRecords")
             UserDefaults.standard.removeObject(forKey: "bodyMeasurements")
             UserDefaults.standard.removeObject(forKey: "currentWeek")
+            
+            // Clear in-memory workout data
+            viewModel.completedSessions = []
+            viewModel.personalRecords = []
+            viewModel.bodyMeasurements = []
+            viewModel.currentWeek = 1
             
             // Log out
             isAuthenticated = false

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SocialView: View {
+    let viewModel: WorkoutViewModel
     @AppStorage("hasAppliedToJoin") private var hasApplied = false
     @AppStorage("userEmail") private var userEmail = ""
     @State private var isSubmitting = false
@@ -13,7 +14,7 @@ struct SocialView: View {
         NavigationStack {
             mainContent
                 .navigationDestination(isPresented: $navigateToSettings) {
-                    SettingsView()
+                    SettingsView(viewModel: viewModel)
                 }
         }
     }

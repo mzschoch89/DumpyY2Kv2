@@ -30,7 +30,7 @@ struct HomeView: View {
     }
 
     private var settingsButton: some View {
-        NavigationLink(destination: SettingsView()) {
+        NavigationLink(destination: SettingsView(viewModel: viewModel)) {
             Circle()
                 .fill(
                     LinearGradient(
