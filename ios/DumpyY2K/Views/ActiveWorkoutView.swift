@@ -10,7 +10,9 @@ struct ActiveWorkoutView: View {
     @State private var editingWeight: [String: String] = [:]
     @State private var editingReps: [String: String] = [:]
     @State private var showWarmup: Bool = false
+    @State private var keyboardWarmedUp: Bool = false
     @FocusState private var isTextFieldFocused: Bool
+    @FocusState private var hiddenFieldFocused: Bool
     
     private var allSetsCompleted: Bool {
         guard let session = viewModel.activeSession else { return false }
@@ -23,6 +25,12 @@ struct ActiveWorkoutView: View {
         NavigationStack {
             ZStack {
                 Y2KBackgroundGradient()
+                
+                // Hidden field for keyboard pre-warm (triggered after sheet dismisses)
+                TextField("", text: .constant(""))
+                    .focused($hiddenFieldFocused)
+                    .frame(width: 0, height: 0)
+                    .opacity(0)
 
                 VStack(spacing: 0) {
                     if viewModel.isResting {
@@ -60,7 +68,18 @@ struct ActiveWorkoutView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showWarmup) {
+            .sheet(isPresented: $showWarmup, onDismiss: {
+                // Pre-warm keyboard after sheet is fully dismissed (no race)
+                if !keyboardWarmedUp {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        hiddenFieldFocused = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                            hiddenFieldFocused = false
+                            keyboardWarmedUp = true
+                        }
+                    }
+                }
+            }) {
                 warmupSheet
                     .presentationDetents([.medium])
                     .presentationDragIndicator(.visible)
