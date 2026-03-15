@@ -5,11 +5,7 @@ struct WorkoutCalendarView: View {
     @State private var selectedMonth = Date()
     @State private var selectedSession: WorkoutSession?
     
-    private var calendar: Calendar {
-        var cal = Calendar.current
-        cal.timeZone = TimeZone.current
-        return cal
-    }
+    private let calendar = Calendar.current
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
     private let weekdays = ["S", "M", "T", "W", "T", "F", "S"]
     
@@ -176,8 +172,22 @@ struct WorkoutCalendarView: View {
     }
     
     private var daysInMonth: [Date?] {
-        guard let range = calendar.range(of: .day, in: .month, for: selectedMonth),
-              let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: selectedMonth)) else {
+        guard let range = calendar.range(of: .day, in: .month, for: selectedMonth) else {
+            return []
+        }
+        
+        // Get year and month components
+        let year = calendar.component(.year, from: selectedMonth)
+        let month = calendar.component(.month, from: selectedMonth)
+        
+        // Create first day at noon local time to avoid timezone edge cases
+        var components = DateComponents()
+        components.year = year
+        components.month = month
+        components.day = 1
+        components.hour = 12
+        
+        guard let firstDay = calendar.date(from: components) else {
             return []
         }
         
@@ -185,7 +195,13 @@ struct WorkoutCalendarView: View {
         var days: [Date?] = Array(repeating: nil, count: firstWeekday)
         
         for day in range {
-            if let date = calendar.date(byAdding: .day, value: day - 1, to: firstDay) {
+            var dayComponents = DateComponents()
+            dayComponents.year = year
+            dayComponents.month = month
+            dayComponents.day = day
+            dayComponents.hour = 12 // Noon local time
+            
+            if let date = calendar.date(from: dayComponents) {
                 days.append(date)
             }
         }
@@ -199,20 +215,9 @@ struct WorkoutCalendarView: View {
     }
     
     private func hasWorkout(on date: Date) -> Bool {
-        let result = viewModel.completedSessions.contains { session in
+        viewModel.completedSessions.contains { session in
             calendar.isDate(session.date, inSameDayAs: date)
         }
-        // Debug: print date comparisons
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        formatter.timeZone = TimeZone.current
-        for session in viewModel.completedSessions {
-            let match = calendar.isDate(session.date, inSameDayAs: date)
-            if match || calendar.component(.day, from: date) == 14 {
-                print("Comparing: cell=\(formatter.string(from: date)) vs session=\(formatter.string(from: session.date)) → \(match)")
-            }
-        }
-        return result
     }
     
     private func getSession(for date: Date) -> WorkoutSession? {
