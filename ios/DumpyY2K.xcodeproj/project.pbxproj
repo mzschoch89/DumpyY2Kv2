@@ -6,6 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F5B67BD52F662A33002305CE /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = F5B67BD42F662A33002305CE /* Auth */; };
+		F5B67BD72F662A33002305CE /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = F5B67BD62F662A33002305CE /* Functions */; };
+		F5B67BD92F662A33002305CE /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = F5B67BD82F662A33002305CE /* PostgREST */; };
+		F5B67BDB2F662A33002305CE /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = F5B67BDA2F662A33002305CE /* Realtime */; };
+		F5B67BDD2F662A33002305CE /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = F5B67BDC2F662A33002305CE /* Storage */; };
+		F5B67BE02F662A3C002305CE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = F5B67BDF2F662A3C002305CE /* Supabase */; };
+		F5B67CCB2F668C65002305CE /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = F5B67CCA2F668C65002305CE /* TelemetryClient */; };
+		F5B67CCD2F668C65002305CE /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = F5B67CCC2F668C65002305CE /* TelemetryDeck */; };
+		F5B67CD02F668C7B002305CE /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = F5B67CCF2F668C7B002305CE /* AppsFlyerLib */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		105FC58A2E9EAD3200EA8BCF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +64,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5B67BD92F662A33002305CE /* PostgREST in Frameworks */,
+				F5B67BD72F662A33002305CE /* Functions in Frameworks */,
+				F5B67BE02F662A3C002305CE /* Supabase in Frameworks */,
+				F5B67BD52F662A33002305CE /* Auth in Frameworks */,
+				F5B67BDD2F662A33002305CE /* Storage in Frameworks */,
+				F5B67CCB2F668C65002305CE /* TelemetryClient in Frameworks */,
+				F5B67BDB2F662A33002305CE /* Realtime in Frameworks */,
+				F5B67CCD2F668C65002305CE /* TelemetryDeck in Frameworks */,
+				F5B67CD02F668C7B002305CE /* AppsFlyerLib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +99,7 @@
 				105FC57C2E9EAD3100EA8BCF /* DumpyY2K */,
 				105FC58C2E9EAD3200EA8BCF /* DumpyY2KTests */,
 				105FC5962E9EAD3200EA8BCF /* DumpyY2KUITests */,
+				F5B67BDE2F662A3C002305CE /* Frameworks */,
 				105FC57B2E9EAD3100EA8BCF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +112,13 @@
 				105FC5932E9EAD3200EA8BCF /* DumpyY2KUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F5B67BDE2F662A3C002305CE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +141,15 @@
 			);
 			name = DumpyY2K;
 			packageProductDependencies = (
+				F5B67BD42F662A33002305CE /* Auth */,
+				F5B67BD62F662A33002305CE /* Functions */,
+				F5B67BD82F662A33002305CE /* PostgREST */,
+				F5B67BDA2F662A33002305CE /* Realtime */,
+				F5B67BDC2F662A33002305CE /* Storage */,
+				F5B67BDF2F662A3C002305CE /* Supabase */,
+				F5B67CCA2F668C65002305CE /* TelemetryClient */,
+				F5B67CCC2F668C65002305CE /* TelemetryDeck */,
+				F5B67CCF2F668C7B002305CE /* AppsFlyerLib */,
 			);
 			productName = DumpyY2K;
 			productReference = 105FC57A2E9EAD3100EA8BCF /* DumpyY2K.app */;
@@ -195,6 +233,11 @@
 			);
 			mainGroup = 105FC5712E9EAD3100EA8BCF;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F5B67BD32F662A33002305CE /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				F5B67CC92F668C65002305CE /* XCRemoteSwiftPackageReference "SwiftClient" */,
+				F5B67CCE2F668C7B002305CE /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 105FC57B2E9EAD3100EA8BCF /* Products */;
 			projectDirPath = "";
@@ -397,7 +440,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 343NF6RT25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -411,7 +454,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.rork.zrkjnbbn1d8ddl1yv3152;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.vibegods.dumpyy2k-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -430,7 +473,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 343NF6RT25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -444,7 +487,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.rork.zrkjnbbn1d8ddl1yv3152;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.vibegods.dumpyy2k-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -466,7 +509,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.rork.zrkjnbbn1d8ddl1yv3152.tests";
+				PRODUCT_BUNDLE_IDENTIFIER = app.rork.zrkjnbbn1d8ddl1yv3152.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -488,7 +531,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.rork.zrkjnbbn1d8ddl1yv3152.tests";
+				PRODUCT_BUNDLE_IDENTIFIER = app.rork.zrkjnbbn1d8ddl1yv3152.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -508,7 +551,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.rork.zrkjnbbn1d8ddl1yv3152.uitests";
+				PRODUCT_BUNDLE_IDENTIFIER = app.rork.zrkjnbbn1d8ddl1yv3152.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -528,7 +571,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.rork.zrkjnbbn1d8ddl1yv3152.uitests";
+				PRODUCT_BUNDLE_IDENTIFIER = app.rork.zrkjnbbn1d8ddl1yv3152.uitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -580,6 +623,81 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F5B67BD32F662A33002305CE /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+		F5B67CC92F668C65002305CE /* XCRemoteSwiftPackageReference "SwiftClient" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TelemetryDeck/SwiftClient";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.11.0;
+			};
+		};
+		F5B67CCE2F668C7B002305CE /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppsFlyerSDK/AppsFlyerFramework";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.17.9;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F5B67BD42F662A33002305CE /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5B67BD32F662A33002305CE /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		F5B67BD62F662A33002305CE /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5B67BD32F662A33002305CE /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		F5B67BD82F662A33002305CE /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5B67BD32F662A33002305CE /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		F5B67BDA2F662A33002305CE /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5B67BD32F662A33002305CE /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		F5B67BDC2F662A33002305CE /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5B67BD32F662A33002305CE /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		F5B67BDF2F662A3C002305CE /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5B67BD32F662A33002305CE /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		F5B67CCA2F668C65002305CE /* TelemetryClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5B67CC92F668C65002305CE /* XCRemoteSwiftPackageReference "SwiftClient" */;
+			productName = TelemetryClient;
+		};
+		F5B67CCC2F668C65002305CE /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5B67CC92F668C65002305CE /* XCRemoteSwiftPackageReference "SwiftClient" */;
+			productName = TelemetryDeck;
+		};
+		F5B67CCF2F668C7B002305CE /* AppsFlyerLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5B67CCE2F668C7B002305CE /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
+			productName = AppsFlyerLib;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 105FC5722E9EAD3100EA8BCF /* Project object */;
 }
