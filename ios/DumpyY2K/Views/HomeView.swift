@@ -285,7 +285,7 @@ struct PRRow: View {
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(pr.exerciseName.uppercased())
-                    .font(.system(.subheadline, design: .rounded, weight: .black))
+                    .font(.system(.subheadline, design: .rounded, weight: .regular))
                     .foregroundStyle(Y2K.turquoise)
                     .lineLimit(1)
                 Text(pr.date.formatted(.dateTime.month(.abbreviated).day()))
