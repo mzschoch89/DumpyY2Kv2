@@ -74,7 +74,7 @@ class AnalyticsService: NSObject {
             "pr_count": String(prCount)
         ])
         
-        AppsFlyerLib.shared().logEvent(AFEventCompleteTutorial, withValues: [
+        AppsFlyerLib.shared().logEvent("af_tutorial_completion", withValues: [
             "day": day,
             "week": week,
             "duration_minutes": durationMinutes,
@@ -113,7 +113,7 @@ class AnalyticsService: NSObject {
     
     func trackPhoneVerified() {
         TelemetryDeck.signal("phone_verified")
-        AppsFlyerLib.shared().logEvent(AFEventCompleteRegistration, withValues: nil)
+        AppsFlyerLib.shared().logEvent("af_complete_registration", withValues: nil)
     }
     
     func trackClubApplicationSubmitted() {
