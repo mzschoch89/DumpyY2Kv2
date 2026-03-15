@@ -97,9 +97,16 @@ struct WorkoutCalendarView: View {
                             hasWorkout: hasWorkout(on: date),
                             isToday: calendar.isDateInToday(date),
                             onTap: {
+                                print("=== DAY TAPPED ===")
+                                print("Date: \(date)")
+                                print("Has workout: \(hasWorkout(on: date))")
                                 if let session = getSession(for: date) {
+                                    print("Found session: \(session.id)")
                                     selectedSession = session
                                     showSessionDetail = true
+                                    print("showSessionDetail set to: \(showSessionDetail)")
+                                } else {
+                                    print("NO SESSION FOUND for date")
                                 }
                             }
                         )
