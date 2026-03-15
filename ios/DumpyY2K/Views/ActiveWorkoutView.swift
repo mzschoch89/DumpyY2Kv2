@@ -10,7 +10,9 @@ struct ActiveWorkoutView: View {
     @State private var editingWeight: [String: String] = [:]
     @State private var editingReps: [String: String] = [:]
     @State private var showWarmup: Bool = false
+    @State private var keyboardWarmedUp: Bool = false
     @FocusState private var isTextFieldFocused: Bool
+    @FocusState private var hiddenFieldFocused: Bool
     
     private var allSetsCompleted: Bool {
         guard let session = viewModel.activeSession else { return false }
@@ -23,6 +25,16 @@ struct ActiveWorkoutView: View {
         NavigationStack {
             ZStack {
                 Y2KBackgroundGradient()
+                    .onTapGesture {
+                        // Dismiss keyboard when tapping background
+                        isTextFieldFocused = false
+                    }
+                
+                // Hidden field for keyboard warmup
+                TextField("", text: .constant(""))
+                    .focused($hiddenFieldFocused)
+                    .frame(width: 0, height: 0)
+                    .opacity(0)
 
                 VStack(spacing: 0) {
                     if viewModel.isResting {
@@ -69,6 +81,16 @@ struct ActiveWorkoutView: View {
                 if !viewModel.warmupShown {
                     showWarmup = true
                     viewModel.warmupShown = true
+                }
+                // Warm up keyboard to avoid delay on first tap
+                if !keyboardWarmedUp {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        hiddenFieldFocused = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            hiddenFieldFocused = false
+                            keyboardWarmedUp = true
+                        }
+                    }
                 }
             }
             .onChange(of: viewModel.shouldAdvanceExercise) { _, newValue in
