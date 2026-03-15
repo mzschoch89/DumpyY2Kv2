@@ -80,7 +80,7 @@ struct WorkoutCalendarView: View {
             
             // Weekday Headers
             LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(weekdays, id: \.self) { day in
+                ForEach(Array(weekdays.enumerated()), id: \.offset) { _, day in
                     Text(day)
                         .font(.system(.caption, design: .rounded, weight: .bold))
                         .foregroundStyle(Y2K.turquoise)
@@ -90,7 +90,7 @@ struct WorkoutCalendarView: View {
             
             // Calendar Days
             LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(daysInMonth, id: \.self) { date in
+                ForEach(Array(daysInMonth.enumerated()), id: \.offset) { _, date in
                     if let date = date {
                         DayCell(
                             date: date,
