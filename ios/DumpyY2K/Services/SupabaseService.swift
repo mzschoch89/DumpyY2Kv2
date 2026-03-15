@@ -194,13 +194,27 @@ class SupabaseService {
     func syncCurrentWeek(_ week: Int) async throws {
         guard let userId = currentUser?.id else { return }
         
+        struct WeekUpdate: Codable {
+            let id: String
+            let currentWeek: Int
+            let updatedAt: String
+            
+            enum CodingKeys: String, CodingKey {
+                case id
+                case currentWeek = "current_week"
+                case updatedAt = "updated_at"
+            }
+        }
+        
+        let update = WeekUpdate(
+            id: userId.uuidString,
+            currentWeek: week,
+            updatedAt: ISO8601DateFormatter().string(from: Date())
+        )
+        
         try await client
             .from("user_profiles")
-            .upsert([
-                "id": userId.uuidString,
-                "current_week": week,
-                "updated_at": ISO8601DateFormatter().string(from: Date())
-            ])
+            .upsert(update)
             .execute()
     }
     
