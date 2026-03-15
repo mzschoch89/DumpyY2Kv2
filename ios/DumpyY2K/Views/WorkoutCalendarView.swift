@@ -337,30 +337,44 @@ struct WorkoutDetailSheet: View {
                     }
                     .padding(20)
                     .frame(maxWidth: .infinity)
-                    .background {
-                        RoundedRectangle(cornerRadius: 22)
-                            .fill(.white.opacity(0.9))
-                    }
-                    .y2kDashedBorder(color: Y2K.lavender, cornerRadius: 22)
+                    .background(Color.white.opacity(0.9))
+                    .cornerRadius(22)
                     
                     // Exercises List
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text("EXERCISES")
-                            .font(.system(.caption, design: .rounded, weight: .black))
-                            .foregroundStyle(Y2K.hotPink)
-                            .tracking(1.5)
-                        
-                        ForEach(Array(session.exercises.enumerated()), id: \.offset) { _, exercise in
-                            CalendarExerciseRow(exercise: exercise)
+                    if session.exerciseLogs.isEmpty {
+                        Text("No exercise data recorded")
+                            .font(.system(.body, design: .rounded))
+                            .foregroundStyle(Y2K.deepGreen.opacity(0.6))
+                            .padding(20)
+                    } else {
+                        VStack(alignment: .leading, spacing: 14) {
+                            Text("EXERCISES")
+                                .font(.system(.caption, design: .rounded, weight: .black))
+                                .foregroundStyle(Y2K.hotPink)
+                                .tracking(1.5)
+                            
+                            ForEach(Array(session.exerciseLogs.enumerated()), id: \.offset) { _, log in
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(log.exerciseName)
+                                            .font(.system(.subheadline, design: .rounded, weight: .bold))
+                                            .foregroundStyle(Y2K.deepGreen)
+                                        
+                                        let completedSets = log.sets.filter(\.isCompleted)
+                                        Text("\(completedSets.count) sets completed")
+                                            .font(.system(.caption, design: .rounded))
+                                            .foregroundStyle(Y2K.deepGreen.opacity(0.6))
+                                    }
+                                    Spacer()
+                                }
+                                .padding(.vertical, 8)
+                            }
                         }
+                        .padding(20)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.white.opacity(0.9))
+                        .cornerRadius(22)
                     }
-                    .padding(20)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background {
-                        RoundedRectangle(cornerRadius: 22)
-                            .fill(.white.opacity(0.9))
-                    }
-                    .y2kSolidBorder(color: Y2K.hotPink.opacity(0.3), cornerRadius: 22)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 24)
