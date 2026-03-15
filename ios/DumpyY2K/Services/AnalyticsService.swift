@@ -12,7 +12,7 @@ class AnalyticsService: NSObject {
     
     // AppsFlyer - get from https://hq.appsflyer.com
     private let appsFlyerDevKey = "BVcP3QEwr7xhitYs4teU8W"
-    private let appsFlyerAppID = "YOUR_APPLE_APP_ID" // Numeric App Store ID - get from App Store Connect
+    private let appsFlyerAppID = "6760607330"
     
     private override init() {
         super.init()
