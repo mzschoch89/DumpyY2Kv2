@@ -25,10 +25,6 @@ struct ActiveWorkoutView: View {
         NavigationStack {
             ZStack {
                 Y2KBackgroundGradient()
-                    .onTapGesture {
-                        // Dismiss keyboard when tapping background
-                        isTextFieldFocused = false
-                    }
                 
                 // Hidden field for keyboard warmup
                 TextField("", text: .constant(""))
@@ -263,6 +259,10 @@ struct ActiveWorkoutView: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 24)
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .onTapGesture {
+                isTextFieldFocused = false
             }
         }
     }
