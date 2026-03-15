@@ -6,8 +6,9 @@ struct ActiveWorkoutView: View {
     @State private var showAbortConfirmation: Bool = false
     @State private var showEndConfirmation: Bool = false
     @State private var selectedExerciseIndex: Int = 0
-    @State private var editingWeight: [Int: String] = [:]
-    @State private var editingReps: [Int: String] = [:]
+    // Keys are "exerciseIndex-setIndex" to prevent cross-exercise bleed
+    @State private var editingWeight: [String: String] = [:]
+    @State private var editingReps: [String: String] = [:]
     @State private var showWarmup: Bool = false
     @FocusState private var isTextFieldFocused: Bool
     
@@ -75,8 +76,6 @@ struct ActiveWorkoutView: View {
                 if let next = newValue {
                     withAnimation(.snappy) {
                         selectedExerciseIndex = next
-                        editingWeight = [:]
-                        editingReps = [:]
                     }
                     viewModel.shouldAdvanceExercise = nil
                 }
@@ -170,9 +169,6 @@ struct ActiveWorkoutView: View {
                     Button {
                         withAnimation(.snappy) {
                             selectedExerciseIndex = index
-                            // Clear editing state when switching exercises
-                            editingWeight = [:]
-                            editingReps = [:]
                         }
                     } label: {
                         VStack(spacing: 4) {
@@ -301,20 +297,21 @@ struct ActiveWorkoutView: View {
             .padding(.horizontal, 4)
 
             ForEach(Array(log.sets.enumerated()), id: \.element.id) { setIndex, setLog in
+                let key = "\(exerciseIndex)-\(setIndex)"
                 SetRow(
                     setNumber: setIndex + 1,
                     setLog: setLog,
                     isCompleted: setLog.isCompleted,
-                    weightText: editingWeight[setIndex] ?? (setLog.weight > 0 ? String(format: "%.0f", setLog.weight) : ""),
-                    repsText: editingReps[setIndex] ?? (setLog.reps > 0 ? "\(setLog.reps)" : ""),
-                    onWeightChange: { editingWeight[setIndex] = $0 },
-                    onRepsChange: { editingReps[setIndex] = $0 },
+                    weightText: editingWeight[key] ?? (setLog.weight > 0 ? String(format: "%.0f", setLog.weight) : ""),
+                    repsText: editingReps[key] ?? (setLog.reps > 0 ? "\(setLog.reps)" : ""),
+                    onWeightChange: { editingWeight[key] = $0 },
+                    onRepsChange: { editingReps[key] = $0 },
                     onToggleComplete: {
                         if setLog.isCompleted {
                             viewModel.uncompleteSet(exerciseIndex: exerciseIndex, setIndex: setIndex)
                         } else {
-                            let weight = Double(editingWeight[setIndex] ?? "") ?? setLog.weight
-                            let reps = Int(editingReps[setIndex] ?? "") ?? setLog.reps
+                            let weight = Double(editingWeight[key] ?? "") ?? setLog.weight
+                            let reps = Int(editingReps[key] ?? "") ?? setLog.reps
                             viewModel.completeSet(exerciseIndex: exerciseIndex, setIndex: setIndex, weight: weight, reps: reps)
                         }
                     },
