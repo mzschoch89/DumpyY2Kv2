@@ -74,7 +74,7 @@ class WorkoutViewModel {
             let sets = (0..<setCount).map { i in
                 SetLog(
                     weight: previousLog?.sets[safe: i]?.weight ?? 0,
-                    reps: 0,
+                    reps: previousLog?.sets[safe: i]?.reps ?? 0,
                     isCompleted: false
                 )
             }
@@ -171,7 +171,14 @@ class WorkoutViewModel {
         if let exercises = WorkoutProgramData.exercises[log.category]?[day] {
             let backup = log.exerciseId == exercises.primary.id ? exercises.backup : exercises.primary
             let setCount = session.exerciseLogs[index].sets.count
-            let sets = (0..<setCount).map { _ in SetLog() }
+            let previousLog = lastLogForExercise(backup.id)
+            let sets = (0..<setCount).map { i in
+                SetLog(
+                    weight: previousLog?.sets[safe: i]?.weight ?? 0,
+                    reps: previousLog?.sets[safe: i]?.reps ?? 0,
+                    isCompleted: false
+                )
+            }
             session.exerciseLogs[index] = ExerciseLog(
                 exerciseId: backup.id,
                 exerciseName: backup.name,

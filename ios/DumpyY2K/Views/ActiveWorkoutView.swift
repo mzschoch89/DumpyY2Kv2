@@ -389,14 +389,30 @@ struct ActiveWorkoutView: View {
 
             ForEach(Array(log.sets.enumerated()), id: \.element.id) { setIndex, setLog in
                 let key = "\(exerciseIndex)-\(setIndex)"
+                let isWeightPlaceholder = editingWeight[key] == nil && setLog.weight > 0
+                let isRepsPlaceholder = editingReps[key] == nil && setLog.reps > 0
                 SetRow(
                     setNumber: setIndex + 1,
                     setLog: setLog,
                     isCompleted: setLog.isCompleted,
                     weightText: editingWeight[key] ?? (setLog.weight > 0 ? String(format: "%.0f", setLog.weight) : ""),
                     repsText: editingReps[key] ?? (setLog.reps > 0 ? "\(setLog.reps)" : ""),
+                    isWeightPlaceholder: isWeightPlaceholder,
+                    isRepsPlaceholder: isRepsPlaceholder,
                     onWeightChange: { editingWeight[key] = $0 },
                     onRepsChange: { editingReps[key] = $0 },
+                    onWeightFocus: {
+                        // Copy placeholder to editing state on focus
+                        if editingWeight[key] == nil && setLog.weight > 0 {
+                            editingWeight[key] = String(format: "%.0f", setLog.weight)
+                        }
+                    },
+                    onRepsFocus: {
+                        // Copy placeholder to editing state on focus
+                        if editingReps[key] == nil && setLog.reps > 0 {
+                            editingReps[key] = "\(setLog.reps)"
+                        }
+                    },
                     onToggleComplete: {
                         if setLog.isCompleted {
                             viewModel.uncompleteSet(exerciseIndex: exerciseIndex, setIndex: setIndex)
@@ -620,8 +636,12 @@ struct SetRow: View {
     let isCompleted: Bool
     let weightText: String
     let repsText: String
+    let isWeightPlaceholder: Bool
+    let isRepsPlaceholder: Bool
     let onWeightChange: (String) -> Void
     let onRepsChange: (String) -> Void
+    let onWeightFocus: () -> Void
+    let onRepsFocus: () -> Void
     let onToggleComplete: () -> Void
     var focusedField: FocusState<String?>.Binding
     let rowKey: String
@@ -646,8 +666,8 @@ struct SetRow: View {
                 get: { weightText },
                 set: { onWeightChange($0) }
             ))
-            .font(.system(.body, design: .rounded, weight: .bold))
-            .foregroundStyle(Y2K.turquoise)
+            .font(.system(.body, design: .rounded, weight: isWeightPlaceholder ? .regular : .bold))
+            .foregroundStyle(isWeightPlaceholder ? Y2K.turquoise.opacity(0.4) : Y2K.turquoise)
             .multilineTextAlignment(.center)
             .keyboardType(.decimalPad)
             .padding(.horizontal, 12)
@@ -659,6 +679,7 @@ struct SetRow: View {
             .focused(focusedField, equals: weightFieldKey)
             .onTapGesture {
                 if !isCompleted {
+                    onWeightFocus()
                     focusedField.wrappedValue = weightFieldKey
                 }
             }
@@ -671,8 +692,8 @@ struct SetRow: View {
                 get: { repsText },
                 set: { onRepsChange($0) }
             ))
-            .font(.system(.body, design: .rounded, weight: .bold))
-            .foregroundStyle(Y2K.turquoise)
+            .font(.system(.body, design: .rounded, weight: isRepsPlaceholder ? .regular : .bold))
+            .foregroundStyle(isRepsPlaceholder ? Y2K.turquoise.opacity(0.4) : Y2K.turquoise)
             .multilineTextAlignment(.center)
             .keyboardType(.numberPad)
             .padding(.horizontal, 12)
@@ -684,6 +705,7 @@ struct SetRow: View {
             .focused(focusedField, equals: repsFieldKey)
             .onTapGesture {
                 if !isCompleted {
+                    onRepsFocus()
                     focusedField.wrappedValue = repsFieldKey
                 }
             }
