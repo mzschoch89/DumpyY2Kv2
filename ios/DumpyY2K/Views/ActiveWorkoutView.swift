@@ -310,6 +310,16 @@ struct ActiveWorkoutView: View {
                             MiniStat(label: "REPS", value: meso.repRanges[log.category] ?? "")
                             MiniStat(label: "EFFORT", value: meso.effortLevel.emoji)
                         }
+                        
+                        // Instruction box
+                        Text("Last session's weights and reps are added as placeholders below. The goal is to increase last session's weight and finish all reps before adding further weight.")
+                            .font(.system(.caption2, design: .rounded, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.85))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity)
+                            .background(.white.opacity(0.2), in: RoundedRectangle(cornerRadius: 12))
                     }
                 }
                 .padding(20)

@@ -233,7 +233,7 @@ struct WorkoutProgramData {
             id: "deload", name: "Recovery Week", weeks: [13],
             goal: "Let your body catch up and absorb all the work. This is where growth actually happens.",
             effort: "casual",
-            howToProgress: "No progression. Use lighter weight than week 1. It should feel easy.",
+            howToProgress: "No progression. Use 30% less weight than your last 'Go All Out' session. It should feel easy — that's the point!",
             repRanges: [.squat: "10-12 per leg", .hinge: "8-10", .bridge: "10-12", .abduction: "15-20"],
             totalWorkingSets: 8
         )
