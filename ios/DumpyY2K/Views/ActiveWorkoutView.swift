@@ -25,7 +25,6 @@ struct ActiveWorkoutView: View {
                 Y2KBackgroundGradient()
 
                 VStack(spacing: 0) {
-                    timerBar
                     if viewModel.isResting {
                         restTimerBanner
                     }
@@ -92,9 +91,24 @@ struct ActiveWorkoutView: View {
                     }
                 }
                 ToolbarItem(placement: .principal) {
-                    Text(viewModel.activeSession?.day.label ?? "Workout")
-                        .font(.system(.headline, design: .rounded, weight: .black))
-                        .foregroundStyle(Y2K.turquoise)
+                    HStack(spacing: 12) {
+                        Text(viewModel.activeSession?.day.label ?? "Workout")
+                            .font(.system(.headline, design: .rounded, weight: .black))
+                            .foregroundStyle(Y2K.turquoise)
+                        
+                        HStack(spacing: 4) {
+                            Image(systemName: "clock.fill")
+                                .font(.caption)
+                                .foregroundStyle(Y2K.hotPink)
+                            Text(viewModel.formattedTimer)
+                                .font(.system(.subheadline, design: .rounded, weight: .bold))
+                                .foregroundStyle(Y2K.turquoise)
+                                .monospacedDigit()
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(Color.white.opacity(0.8), in: Capsule())
+                    }
                 }
             }
             .alert("Abort Workout?", isPresented: $showAbortConfirmation) {
@@ -234,37 +248,36 @@ struct ActiveWorkoutView: View {
         VStack(spacing: 8) {
             ZStack {
                 Y2KCardGradient(style: 1)
-                    .clipShape(.rect(cornerRadius: 22))
+                    .clipShape(.rect(cornerRadius: 18))
 
-                VStack(spacing: 14) {
-                    Text(log.exerciseName.uppercased())
-                        .font(.system(.title3, design: .rounded, weight: .black))
-                        .foregroundStyle(.white)
-                        .shadow(color: .black.opacity(0.15), radius: 3, y: 2)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .lineLimit(nil)
-
+                HStack(spacing: 16) {
                     Image("\(log.exerciseId)-white")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 80, height: 80)
+                        .frame(width: 60, height: 60)
                         .opacity(0.9)
+                    
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(log.exerciseName.uppercased())
+                            .font(.system(.subheadline, design: .rounded, weight: .black))
+                            .foregroundStyle(.white)
+                            .shadow(color: .black.opacity(0.15), radius: 2, y: 1)
+                            .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
 
-                    if let meso = viewModel.currentMesocycle {
-                        HStack(spacing: 16) {
-                            MiniStat(label: "SETS", value: "\(meso.setsForCategory(log.category))")
-                            MiniStat(label: "REPS", value: meso.repRanges[log.category] ?? "")
-                            MiniStat(label: "EFFORT", value: meso.effortLevel.emoji)
+                        if let meso = viewModel.currentMesocycle {
+                            HStack(spacing: 12) {
+                                MiniStat(label: "SETS", value: "\(meso.setsForCategory(log.category))")
+                                MiniStat(label: "REPS", value: meso.repRanges[log.category] ?? "")
+                                MiniStat(label: "EFFORT", value: meso.effortLevel.emoji)
+                            }
                         }
                     }
+                    
+                    Spacer()
                 }
-                .padding(20)
-
-                SparkleDecoration(size: 14, color: .white.opacity(0.6))
-                    .offset(x: 130, y: -70)
+                .padding(16)
             }
-            .frame(minHeight: 200)
 
             Button {
                 viewModel.swapExercise(at: selectedExerciseIndex)
