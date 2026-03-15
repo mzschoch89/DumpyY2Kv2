@@ -350,7 +350,7 @@ struct WorkoutDetailSheet: View {
                             .foregroundStyle(Y2K.hotPink)
                             .tracking(1.5)
                         
-                        ForEach(session.exercises, id: \.name) { exercise in
+                        ForEach(Array(session.exercises.enumerated()), id: \.offset) { _, exercise in
                             CalendarExerciseRow(exercise: exercise)
                         }
                     }
