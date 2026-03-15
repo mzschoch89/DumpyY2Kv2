@@ -28,22 +28,15 @@ struct AuthView: View {
                         .animation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: isPulsing)
                         .onAppear { isPulsing = true }
                     
-                    VStack(spacing: 6) {
-                        HStack(spacing: 0) {
-                            Text("DUMPY ")
-                                .font(.system(size: 42, weight: .black, design: .rounded))
-                                .foregroundStyle(Y2K.hotPink)
-                            Text("Y2K")
-                                .font(.system(size: 42, weight: .bold, design: .serif))
-                                .italic()
-                                .foregroundStyle(Y2K.turquoise)
-                                .rotationEffect(.degrees(-3))
-                        }
-                        
-                        Text("BUILD YOUR BEST BOOTY")
-                            .font(.system(.caption, design: .rounded, weight: .bold))
-                            .foregroundStyle(Y2K.turquoise.opacity(0.7))
-                            .tracking(2)
+                    HStack(spacing: 0) {
+                        Text("DUMPY ")
+                            .font(.system(size: 42, weight: .black, design: .rounded))
+                            .foregroundStyle(Y2K.hotPink)
+                        Text("Y2K")
+                            .font(.system(size: 42, weight: .bold, design: .serif))
+                            .italic()
+                            .foregroundStyle(Y2K.turquoise)
+                            .rotationEffect(.degrees(-3))
                     }
                 }
                 .padding(.bottom, 50)
