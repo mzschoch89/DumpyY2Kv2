@@ -234,7 +234,7 @@ struct ActiveWorkoutView: View {
                         }
                         .foregroundStyle(selectedExerciseIndex == index ? .white : (completed ? Y2K.limeGreen : Y2K.turquoise))
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
+                        .padding(.vertical, 9)
                         .background {
                             if selectedExerciseIndex == index {
                                 Capsule().fill(
@@ -252,7 +252,8 @@ struct ActiveWorkoutView: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 8)
+        .padding(.top, 8)
+        .padding(.bottom, 14)
     }
 
     @ViewBuilder
