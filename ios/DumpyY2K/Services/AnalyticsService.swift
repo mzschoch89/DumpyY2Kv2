@@ -8,7 +8,7 @@ class AnalyticsService: NSObject {
     
     // MARK: - Configuration
     // TelemetryDeck App ID - get from https://dashboard.telemetrydeck.com
-    private let telemetryDeckAppID = "YOUR_TELEMETRYDECK_APP_ID"
+    private let telemetryDeckAppID = "A772EA61-6E34-4881-883F-D5982F651532"
     
     // AppsFlyer - get from https://hq.appsflyer.com
     private let appsFlyerDevKey = "YOUR_APPSFLYER_DEV_KEY"
