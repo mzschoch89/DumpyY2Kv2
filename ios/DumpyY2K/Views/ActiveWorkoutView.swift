@@ -11,6 +11,7 @@ struct ActiveWorkoutView: View {
     @State private var editingReps: [String: String] = [:]
     @State private var showWarmup: Bool = false
     @State private var keyboardWarmedUp: Bool = false
+    @State private var showWeightHelp: Bool = false
     @FocusState private var focusedField: String?
     @FocusState private var hiddenFieldFocused: Bool
     
@@ -100,7 +101,11 @@ struct ActiveWorkoutView: View {
                         selectedExerciseIndex = next
                     }
                     viewModel.shouldAdvanceExercise = nil
+                    showWeightHelp = false
                 }
+            }
+            .onChange(of: selectedExerciseIndex) { _, _ in
+                showWeightHelp = false
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -311,17 +316,36 @@ struct ActiveWorkoutView: View {
                             MiniStat(label: "EFFORT", value: meso.effortLevel.emoji)
                         }
                         
-                        // Instruction box - different text for recovery week
-                        Text(meso.id == "deload" 
-                            ? "Last session's weights and reps are added as placeholders below. For this recovery week, reduce weights by ~30%."
-                            : "Last session's weights and reps are added as placeholders below. The goal is to increase last session's weight and finish all reps before adding further weight.")
-                            .font(.system(.caption2, design: .rounded, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.85))
-                            .multilineTextAlignment(.center)
+                        // Collapsible instruction box
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                showWeightHelp.toggle()
+                            }
+                        } label: {
+                            VStack(spacing: 6) {
+                                if showWeightHelp {
+                                    Text(meso.id == "deload" 
+                                        ? "Last session's weights and reps are added as placeholders below. For this recovery week, reduce weights by ~30%."
+                                        : "Last session's weights and reps are added as placeholders below. The goal is to increase last session's weight and finish all reps before adding further weight.")
+                                        .font(.system(.caption2, design: .rounded, weight: .medium))
+                                        .foregroundStyle(.white.opacity(0.85))
+                                        .multilineTextAlignment(.center)
+                                } else {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "questionmark.circle")
+                                            .font(.caption)
+                                        Text("How to choose my weight? Tap for help!")
+                                            .font(.system(.caption2, design: .rounded, weight: .medium))
+                                    }
+                                    .foregroundStyle(.white.opacity(0.85))
+                                }
+                            }
                             .padding(.horizontal, 16)
-                            .padding(.vertical, 10)
+                            .padding(.vertical, showWeightHelp ? 10 : 8)
                             .frame(maxWidth: .infinity)
                             .background(.white.opacity(0.2), in: RoundedRectangle(cornerRadius: 12))
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding(20)
