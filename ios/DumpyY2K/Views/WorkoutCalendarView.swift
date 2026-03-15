@@ -403,7 +403,7 @@ struct WorkoutDetailSheet: View {
                             .strokeBorder(Y2K.hotPink.opacity(0.3), lineWidth: 2)
                     )
                     
-                    // Exercises List
+                    // Exercises List with Set Breakdown
                     VStack(alignment: .leading, spacing: 16) {
                         Text("EXERCISES")
                             .font(.system(.caption, design: .rounded, weight: .black))
@@ -411,42 +411,53 @@ struct WorkoutDetailSheet: View {
                             .tracking(1.5)
                         
                         ForEach(Array(session.exerciseLogs.enumerated()), id: \.offset) { _, log in
-                            let completedSets = log.sets.filter(\.isCompleted)
-                            let maxWeight = completedSets.map(\.weight).max() ?? 0
-                            let totalReps = completedSets.map(\.reps).reduce(0, +)
                             let isPR = session.prsSet.contains(log.exerciseName)
                             
-                            HStack(spacing: 12) {
-                                // Exercise icon
-                                Circle()
-                                    .fill(Y2K.softPink.opacity(0.3))
-                                    .frame(width: 44, height: 44)
-                                    .overlay(
-                                        Image(systemName: "figure.strengthtraining.traditional")
-                                            .font(.system(size: 18))
-                                            .foregroundStyle(Y2K.hotPink)
-                                    )
-                                
-                                VStack(alignment: .leading, spacing: 4) {
-                                    HStack {
-                                        Text(log.exerciseName)
-                                            .font(.system(.subheadline, design: .rounded, weight: .bold))
-                                            .foregroundStyle(Y2K.deepGreen)
-                                        
-                                        if isPR {
-                                            Text("🏆")
-                                                .font(.caption)
-                                        }
-                                    }
+                            VStack(alignment: .leading, spacing: 10) {
+                                // Exercise name header
+                                HStack {
+                                    Text(log.exerciseName)
+                                        .font(.system(.subheadline, design: .rounded, weight: .bold))
+                                        .foregroundStyle(Y2K.deepGreen)
                                     
-                                    Text("\(completedSets.count) sets • \(totalReps) reps • \(Int(maxWeight)) lbs")
-                                        .font(.system(.caption, design: .rounded))
-                                        .foregroundStyle(Y2K.deepGreen.opacity(0.6))
+                                    if isPR {
+                                        Text("🏆 PR")
+                                            .font(.system(.caption2, design: .rounded, weight: .bold))
+                                            .foregroundStyle(Y2K.limeGreen)
+                                            .padding(.horizontal, 6)
+                                            .padding(.vertical, 2)
+                                            .background(Y2K.limeGreen.opacity(0.15), in: Capsule())
+                                    }
                                 }
                                 
-                                Spacer()
+                                // Individual sets
+                                VStack(alignment: .leading, spacing: 6) {
+                                    ForEach(Array(log.sets.enumerated()), id: \.offset) { setIndex, setLog in
+                                        HStack(spacing: 8) {
+                                            Text("Set \(setIndex + 1):")
+                                                .font(.system(.caption, design: .rounded, weight: .medium))
+                                                .foregroundStyle(Y2K.deepGreen.opacity(0.5))
+                                                .frame(width: 50, alignment: .leading)
+                                            
+                                            if setLog.isCompleted {
+                                                Text("\(Int(setLog.weight)) lbs × \(setLog.reps) reps")
+                                                    .font(.system(.caption, design: .rounded, weight: .semibold))
+                                                    .foregroundStyle(Y2K.deepGreen.opacity(0.8))
+                                            } else {
+                                                Text("skipped")
+                                                    .font(.system(.caption, design: .rounded, weight: .medium))
+                                                    .foregroundStyle(Y2K.deepGreen.opacity(0.3))
+                                                    .italic()
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding(.leading, 4)
                             }
-                            .padding(.vertical, 8)
+                            .padding(.vertical, 12)
+                            .padding(.horizontal, 14)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Y2K.cream.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
                         }
                     }
                     .padding(20)
