@@ -5,7 +5,11 @@ struct WorkoutCalendarView: View {
     @State private var selectedMonth = Date()
     @State private var selectedSession: WorkoutSession?
     
-    private let calendar = Calendar.current
+    private var calendar: Calendar {
+        var cal = Calendar.current
+        cal.timeZone = TimeZone.current
+        return cal
+    }
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
     private let weekdays = ["S", "M", "T", "W", "T", "F", "S"]
     
@@ -195,9 +199,20 @@ struct WorkoutCalendarView: View {
     }
     
     private func hasWorkout(on date: Date) -> Bool {
-        viewModel.completedSessions.contains { session in
+        let result = viewModel.completedSessions.contains { session in
             calendar.isDate(session.date, inSameDayAs: date)
         }
+        // Debug: print date comparisons
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        formatter.timeZone = TimeZone.current
+        for session in viewModel.completedSessions {
+            let match = calendar.isDate(session.date, inSameDayAs: date)
+            if match || calendar.component(.day, from: date) == 14 {
+                print("Comparing: cell=\(formatter.string(from: date)) vs session=\(formatter.string(from: session.date)) → \(match)")
+            }
+        }
+        return result
     }
     
     private func getSession(for date: Date) -> WorkoutSession? {
@@ -312,6 +327,7 @@ struct WorkoutDetailSheet: View {
     
     private var dateString: String {
         let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
         formatter.dateFormat = "EEEE, MMM d"
         return formatter.string(from: session.date)
     }
