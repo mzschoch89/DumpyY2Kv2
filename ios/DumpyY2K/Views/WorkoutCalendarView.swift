@@ -310,6 +310,16 @@ struct WorkoutDetailSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
+        let _ = print("=== WorkoutDetailSheet RENDER START ===")
+        let _ = print("Session ID: \(session.id)")
+        let _ = print("Session date: \(session.date)")
+        let _ = print("Session week: \(session.week)")
+        let _ = print("Session day: \(session.day)")
+        let _ = print("Session day.rawValue: \(session.day.rawValue)")
+        let _ = print("ExerciseLogs count: \(session.exerciseLogs.count)")
+        let _ = print("IsCompleted: \(session.isCompleted)")
+        let _ = print("=== WorkoutDetailSheet RENDER END ===")
+        
         VStack(spacing: 20) {
             // Header
             HStack {
@@ -320,31 +330,23 @@ struct WorkoutDetailSheet: View {
             }
             .padding()
             
-            // Basic info
+            // Basic info - using safe string interpolation
             VStack(spacing: 8) {
-                Text("Day \(session.day.rawValue)")
+                Text("Week \(session.week)")
                     .font(.title2.bold())
                 
-                Text("Week \(session.week)")
-                    .foregroundStyle(.secondary)
-                
-                Text("\(session.exerciseLogs.count) exercises")
+                Text("\(session.exerciseLogs.count) exercises logged")
                     .foregroundStyle(.secondary)
             }
             
-            // Exercise list
-            List {
-                ForEach(Array(session.exerciseLogs.enumerated()), id: \.offset) { index, log in
-                    VStack(alignment: .leading) {
-                        Text(log.exerciseName)
-                            .font(.headline)
-                        Text("\(log.sets.count) sets")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
+            Spacer()
+        }
+        .onAppear {
+            print("=== WorkoutDetailSheet onAppear ===")
+            print("Full session: \(session)")
+            for (i, log) in session.exerciseLogs.enumerated() {
+                print("Exercise \(i): \(log.exerciseName), sets: \(log.sets.count)")
             }
-            .listStyle(.plain)
         }
     }
 }
