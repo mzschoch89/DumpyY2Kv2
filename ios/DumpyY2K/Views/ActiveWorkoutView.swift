@@ -47,13 +47,13 @@ struct ActiveWorkoutView: View {
                         
                         // Top and bottom fade overlays
                         VStack {
-                            // Top fade
+                            // Top fade (reduced height)
                             LinearGradient(
                                 colors: [Y2K.cream, Y2K.cream.opacity(0)],
                                 startPoint: .top,
                                 endPoint: .bottom
                             )
-                            .frame(height: 30)
+                            .frame(height: 16)
                             
                             Spacer()
                             
@@ -270,6 +270,7 @@ struct ActiveWorkoutView: View {
                         formTipsCard(log: log)
                     }
                     .padding(.horizontal)
+                    .padding(.top, 8) // Space below tab bar so top fade doesn't cover card
                     .padding(.bottom, 350) // Extra padding so last row can scroll above keyboard
                 }
                 .scrollDismissesKeyboard(.interactively)
