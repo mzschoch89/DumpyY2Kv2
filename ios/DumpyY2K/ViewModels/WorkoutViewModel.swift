@@ -264,6 +264,7 @@ class WorkoutViewModel {
     }
 
     func save() {
+        // Save locally first
         if let data = try? JSONEncoder().encode(completedSessions) {
             UserDefaults.standard.set(data, forKey: "completedSessions")
         }
@@ -274,9 +275,34 @@ class WorkoutViewModel {
             UserDefaults.standard.set(data, forKey: "bodyMeasurements")
         }
         UserDefaults.standard.set(currentWeek, forKey: "currentWeek")
+        
+        // Sync to cloud if authenticated
+        Task {
+            await syncToCloud()
+        }
+    }
+    
+    private func syncToCloud() async {
+        guard SupabaseService.shared.isAuthenticated else { return }
+        
+        do {
+            // Sync latest workout session
+            if let lastSession = completedSessions.last {
+                try await SupabaseService.shared.syncWorkoutSession(lastSession)
+            }
+            
+            // Sync PRs
+            try await SupabaseService.shared.syncPersonalRecords(personalRecords)
+            
+            // Sync current week
+            try await SupabaseService.shared.syncCurrentWeek(currentWeek)
+        } catch {
+            print("Cloud sync failed: \(error)")
+        }
     }
 
     func load() {
+        // Load from local first
         if let data = UserDefaults.standard.data(forKey: "completedSessions"),
            let sessions = try? JSONDecoder().decode([WorkoutSession].self, from: data) {
             completedSessions = sessions
@@ -291,6 +317,68 @@ class WorkoutViewModel {
         }
         let week = UserDefaults.standard.integer(forKey: "currentWeek")
         currentWeek = week > 0 ? week : 1
+        
+        // Then try to load from cloud
+        Task {
+            await loadFromCloud()
+        }
+    }
+    
+    private func loadFromCloud() async {
+        guard SupabaseService.shared.isAuthenticated else { return }
+        
+        do {
+            // Fetch workouts from cloud
+            let cloudSessions = try await SupabaseService.shared.fetchWorkoutSessions()
+            
+            // Merge: keep local sessions that aren't in cloud, add cloud sessions
+            let localIds = Set(completedSessions.map { $0.id })
+            let cloudIds = Set(cloudSessions.map { $0.id })
+            
+            // Add any cloud sessions we don't have locally
+            for session in cloudSessions {
+                if !localIds.contains(session.id) {
+                    completedSessions.append(session)
+                }
+            }
+            
+            // Sort by date
+            completedSessions.sort { $0.date < $1.date }
+            
+            // Fetch PRs
+            let cloudPRs = try await SupabaseService.shared.fetchPersonalRecords()
+            
+            // Merge PRs - keep higher weight for each exercise
+            var prMap: [String: PersonalRecord] = [:]
+            for pr in personalRecords {
+                prMap[pr.exerciseName] = pr
+            }
+            for pr in cloudPRs {
+                if let existing = prMap[pr.exerciseName] {
+                    if pr.weight > existing.weight {
+                        prMap[pr.exerciseName] = pr
+                    }
+                } else {
+                    prMap[pr.exerciseName] = pr
+                }
+            }
+            personalRecords = Array(prMap.values)
+            
+            // Fetch current week
+            if let cloudWeek = try await SupabaseService.shared.fetchCurrentWeek() {
+                currentWeek = max(currentWeek, cloudWeek)
+            }
+            
+            // Save merged data locally
+            if let data = try? JSONEncoder().encode(completedSessions) {
+                UserDefaults.standard.set(data, forKey: "completedSessions")
+            }
+            if let data = try? JSONEncoder().encode(personalRecords) {
+                UserDefaults.standard.set(data, forKey: "personalRecords")
+            }
+        } catch {
+            print("Cloud load failed: \(error)")
+        }
     }
 }
 
