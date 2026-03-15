@@ -96,7 +96,7 @@ struct ActiveWorkoutView: View {
                             .font(.system(.headline, design: .rounded, weight: .black))
                             .foregroundStyle(Y2K.turquoise)
                         
-                        HStack(spacing: 4) {
+                        HStack(spacing: 6) {
                             Image(systemName: "clock.fill")
                                 .font(.caption)
                                 .foregroundStyle(Y2K.hotPink)
@@ -104,9 +104,10 @@ struct ActiveWorkoutView: View {
                                 .font(.system(.subheadline, design: .rounded, weight: .bold))
                                 .foregroundStyle(Y2K.turquoise)
                                 .monospacedDigit()
+                                .frame(minWidth: 60)
                         }
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 5)
                         .background(Color.white.opacity(0.8), in: Capsule())
                     }
                 }
