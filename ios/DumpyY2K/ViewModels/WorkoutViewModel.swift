@@ -111,7 +111,10 @@ class WorkoutViewModel {
         startRestTimer(seconds: category.restSeconds)
 
         if let log = activeSession?.exerciseLogs[exerciseIndex] {
-            checkPersonalRecord(exerciseName: log.exerciseName, weight: weight)
+            let isPR = checkPersonalRecord(exerciseName: log.exerciseName, weight: weight)
+            if isPR, let session = activeSession, !session.prsSet.contains(log.exerciseName) {
+                activeSession?.prsSet.append(log.exerciseName)
+            }
 
             if log.sets.allSatisfy({ $0.isCompleted }) {
                 if let session = activeSession {
@@ -232,12 +235,15 @@ class WorkoutViewModel {
         return nil
     }
 
-    private func checkPersonalRecord(exerciseName: String, weight: Double) {
+    @discardableResult
+    private func checkPersonalRecord(exerciseName: String, weight: Double) -> Bool {
         let currentPR = personalRecords.first { $0.exerciseName == exerciseName }
         if currentPR == nil || weight > (currentPR?.weight ?? 0) {
             personalRecords.removeAll { $0.exerciseName == exerciseName }
             personalRecords.append(PersonalRecord(exerciseName: exerciseName, weight: weight))
+            return true
         }
+        return false
     }
 
     func addMeasurement(_ measurement: BodyMeasurement) {
