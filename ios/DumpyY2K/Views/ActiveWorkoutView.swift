@@ -261,16 +261,21 @@ struct ActiveWorkoutView: View {
                         formTipsCard(log: log)
                     }
                     .padding(.horizontal)
-                    .padding(.bottom, 300) // Extra padding so last row can scroll to center
+                    .padding(.bottom, 350) // Extra padding so last row can scroll above keyboard
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .onTapGesture {
                     isTextFieldFocused = false
+                    focusedSetKey = nil
                 }
                 .onChange(of: focusedSetKey) { _, newKey in
                     if let key = newKey {
-                        withAnimation(.easeOut(duration: 0.25)) {
-                            proxy.scrollTo(key, anchor: .center)
+                        // Delay to let keyboard animate up first
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            withAnimation(.easeOut(duration: 0.3)) {
+                                // Anchor at 0.3 = 30% from top, keeps row visible above keyboard
+                                proxy.scrollTo(key, anchor: UnitPoint(x: 0.5, y: 0.3))
+                            }
                         }
                     }
                 }
