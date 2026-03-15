@@ -310,43 +310,145 @@ struct WorkoutDetailSheet: View {
     let viewModel: WorkoutViewModel
     @Environment(\.dismiss) private var dismiss
     
+    private var dateString: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, MMM d"
+        return formatter.string(from: session.date)
+    }
+    
+    private var dayName: String {
+        "Day \(session.day.rawValue.prefix(1).uppercased())"
+    }
+    
+    private var prCount: Int {
+        session.prsSet.count
+    }
+    
     var body: some View {
-        let _ = print("=== WorkoutDetailSheet RENDER START ===")
-        let _ = print("Session ID: \(session.id)")
-        let _ = print("Session date: \(session.date)")
-        let _ = print("Session week: \(session.week)")
-        let _ = print("Session day: \(session.day)")
-        let _ = print("Session day.rawValue: \(session.day.rawValue)")
-        let _ = print("ExerciseLogs count: \(session.exerciseLogs.count)")
-        let _ = print("IsCompleted: \(session.isCompleted)")
-        let _ = print("=== WorkoutDetailSheet RENDER END ===")
-        
-        VStack(spacing: 20) {
-            // Header
-            HStack {
-                Text("Workout Details")
-                    .font(.headline)
-                Spacer()
-                Button("Done") { dismiss() }
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Header Card
+                    VStack(spacing: 16) {
+                        // Day name with emoji
+                        HStack(spacing: 8) {
+                            Text("🍑")
+                                .font(.system(size: 32))
+                            Text(dayName)
+                                .font(.system(size: 32, weight: .black, design: .rounded))
+                                .foregroundStyle(Y2K.hotPink)
+                        }
+                        
+                        Text(dateString)
+                            .font(.system(.subheadline, design: .rounded, weight: .medium))
+                            .foregroundStyle(Y2K.deepGreen.opacity(0.6))
+                        
+                        // Stats row
+                        HStack(spacing: 24) {
+                            VStack(spacing: 4) {
+                                Text("\(session.exerciseLogs.count)")
+                                    .font(.system(.title2, design: .rounded, weight: .black))
+                                    .foregroundStyle(Y2K.turquoise)
+                                Text("Exercises")
+                                    .font(.system(.caption2, design: .rounded))
+                                    .foregroundStyle(Y2K.deepGreen.opacity(0.5))
+                            }
+                            
+                            VStack(spacing: 4) {
+                                Text("\(prCount)")
+                                    .font(.system(.title2, design: .rounded, weight: .black))
+                                    .foregroundStyle(Y2K.limeGreen)
+                                Text("PRs")
+                                    .font(.system(.caption2, design: .rounded))
+                                    .foregroundStyle(Y2K.deepGreen.opacity(0.5))
+                            }
+                            
+                            VStack(spacing: 4) {
+                                Text(String(format: "%.0f", session.totalTonnage))
+                                    .font(.system(.title2, design: .rounded, weight: .black))
+                                    .foregroundStyle(Y2K.lavender)
+                                Text("lbs lifted")
+                                    .font(.system(.caption2, design: .rounded))
+                                    .foregroundStyle(Y2K.deepGreen.opacity(0.5))
+                            }
+                        }
+                    }
+                    .padding(24)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.white.opacity(0.9))
+                    .cornerRadius(22)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 22)
+                            .strokeBorder(Y2K.hotPink.opacity(0.3), lineWidth: 2)
+                    )
+                    
+                    // Exercises List
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("EXERCISES")
+                            .font(.system(.caption, design: .rounded, weight: .black))
+                            .foregroundStyle(Y2K.turquoise)
+                            .tracking(1.5)
+                        
+                        ForEach(Array(session.exerciseLogs.enumerated()), id: \.offset) { _, log in
+                            let completedSets = log.sets.filter(\.isCompleted)
+                            let maxWeight = completedSets.map(\.weight).max() ?? 0
+                            let totalReps = completedSets.map(\.reps).reduce(0, +)
+                            let isPR = session.prsSet.contains(log.exerciseName)
+                            
+                            HStack(spacing: 12) {
+                                // Exercise icon
+                                Circle()
+                                    .fill(Y2K.softPink.opacity(0.3))
+                                    .frame(width: 44, height: 44)
+                                    .overlay(
+                                        Image(systemName: "figure.strengthtraining.traditional")
+                                            .font(.system(size: 18))
+                                            .foregroundStyle(Y2K.hotPink)
+                                    )
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack {
+                                        Text(log.exerciseName)
+                                            .font(.system(.subheadline, design: .rounded, weight: .bold))
+                                            .foregroundStyle(Y2K.deepGreen)
+                                        
+                                        if isPR {
+                                            Text("🏆")
+                                                .font(.caption)
+                                        }
+                                    }
+                                    
+                                    Text("\(completedSets.count) sets • \(totalReps) reps • \(Int(maxWeight)) lbs")
+                                        .font(.system(.caption, design: .rounded))
+                                        .foregroundStyle(Y2K.deepGreen.opacity(0.6))
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding(.vertical, 8)
+                        }
+                    }
+                    .padding(20)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.white.opacity(0.9))
+                    .cornerRadius(22)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 22)
+                            .strokeBorder(Y2K.turquoise.opacity(0.3), lineWidth: 2)
+                    )
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 24)
             }
-            .padding()
-            
-            // Basic info - using safe string interpolation
-            VStack(spacing: 8) {
-                Text("Week \(session.week)")
-                    .font(.title2.bold())
-                
-                Text("\(session.exerciseLogs.count) exercises logged")
-                    .foregroundStyle(.secondary)
-            }
-            
-            Spacer()
-        }
-        .onAppear {
-            print("=== WorkoutDetailSheet onAppear ===")
-            print("Full session: \(session)")
-            for (i, log) in session.exerciseLogs.enumerated() {
-                print("Exercise \(i): \(log.exerciseName), sets: \(log.sets.count)")
+            .background { Y2KBackgroundGradient() }
+            .navigationTitle("Workout Details")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { dismiss() }
+                        .font(.system(.body, design: .rounded, weight: .bold))
+                        .foregroundStyle(Y2K.hotPink)
+                }
             }
         }
     }
