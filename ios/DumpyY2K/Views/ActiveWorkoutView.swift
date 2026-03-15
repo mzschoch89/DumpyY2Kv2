@@ -311,8 +311,10 @@ struct ActiveWorkoutView: View {
                             MiniStat(label: "EFFORT", value: meso.effortLevel.emoji)
                         }
                         
-                        // Instruction box
-                        Text("Last session's weights and reps are added as placeholders below. The goal is to increase last session's weight and finish all reps before adding further weight.")
+                        // Instruction box - different text for recovery week
+                        Text(meso.id == "deload" 
+                            ? "Last session's weights and reps are added as placeholders below. For this recovery week, reduce weights by ~30%."
+                            : "Last session's weights and reps are added as placeholders below. The goal is to increase last session's weight and finish all reps before adding further weight.")
                             .font(.system(.caption2, design: .rounded, weight: .medium))
                             .foregroundStyle(.white.opacity(0.85))
                             .multilineTextAlignment(.center)
