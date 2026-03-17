@@ -204,11 +204,11 @@ struct AuthView: View {
                 HStack(spacing: 4) {
                     Text("By continuing, you agree to our")
                         .foregroundStyle(Y2K.deepPurple.opacity(0.5))
-                    Link("Terms", destination: URL(string: "https://dumpyy2k.com/terms")!)
+                    Link("Terms", destination: URL(string: "https://www.dumpyy2k.com/terms.html")!)
                         .foregroundStyle(Y2K.turquoise)
                     Text("&")
                         .foregroundStyle(Y2K.deepPurple.opacity(0.5))
-                    Link("Privacy Policy", destination: URL(string: "https://dumpyy2k.com/privacy")!)
+                    Link("Privacy Policy", destination: URL(string: "https://www.dumpyy2k.com/privacy.html")!)
                         .foregroundStyle(Y2K.turquoise)
                 }
                 .font(.system(.caption2, design: .rounded))
