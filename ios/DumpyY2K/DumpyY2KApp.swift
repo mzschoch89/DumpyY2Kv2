@@ -12,8 +12,9 @@ struct DumpyY2KApp: App {
                 .preferredColorScheme(.light)
                 .onAppear {
                     AnalyticsService.shared.trackAppLaunched()
-                    // Request ATT permission, then start AppsFlyer
-                    AnalyticsService.shared.requestTrackingAndStartAppsFlyer()
+                    // Start AppsFlyer without ATT on launch
+                    // ATT prompt is triggered after authentication in ContentView
+                    AnalyticsService.shared.startAppsFlyer()
                 }
         }
     }

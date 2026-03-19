@@ -47,14 +47,14 @@ class AnalyticsService: NSObject {
         AppsFlyerLib.shared().start()
     }
     
-    /// Request ATT permission and start AppsFlyer with IDFA if granted
-    func requestTrackingAndStartAppsFlyer() {
-        // ATT prompt requires a slight delay after app becomes active
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+    /// Request ATT permission - call this after a meaningful user action (not on launch)
+    /// AppsFlyer should already be started; this just enables IDFA if user grants permission
+    func requestTrackingPermission() {
+        // Small delay to ensure UI is settled
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             ATTrackingManager.requestTrackingAuthorization { status in
                 switch status {
                 case .authorized:
-                    // User granted permission - AppsFlyer will use IDFA for attribution
                     print("ATT: Authorized - IDFA available for attribution")
                 case .denied:
                     print("ATT: Denied - Limited attribution available")
@@ -64,12 +64,6 @@ class AnalyticsService: NSObject {
                     print("ATT: Restricted")
                 @unknown default:
                     print("ATT: Unknown status")
-                }
-                
-                // Start AppsFlyer regardless - it works with or without IDFA
-                // but attribution accuracy is better with IDFA
-                DispatchQueue.main.async {
-                    AppsFlyerLib.shared().start()
                 }
             }
         }

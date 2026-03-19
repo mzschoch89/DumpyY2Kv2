@@ -5,11 +5,17 @@ struct ContentView: View {
     @State private var selectedTab: Int = 0
     @State private var showWorkout: Bool = false
     @AppStorage("isAuthenticated") private var isAuthenticated = false
+    @AppStorage("hasRequestedATT") private var hasRequestedATT = false
 
     var body: some View {
         if !isAuthenticated {
             AuthView {
                 isAuthenticated = true
+                // Request ATT after user authenticates (meaningful moment)
+                if !hasRequestedATT {
+                    hasRequestedATT = true
+                    AnalyticsService.shared.requestTrackingPermission()
+                }
             }
         } else {
             mainContent
