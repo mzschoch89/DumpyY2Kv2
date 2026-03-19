@@ -1,6 +1,8 @@
 import Foundation
 import TelemetryDeck
 import AppsFlyerLib
+import AppTrackingTransparency
+import AdSupport
 
 @MainActor
 class AnalyticsService: NSObject {
@@ -43,6 +45,34 @@ class AnalyticsService: NSObject {
     
     func startAppsFlyer() {
         AppsFlyerLib.shared().start()
+    }
+    
+    /// Request ATT permission and start AppsFlyer with IDFA if granted
+    func requestTrackingAndStartAppsFlyer() {
+        // ATT prompt requires a slight delay after app becomes active
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            ATTrackingManager.requestTrackingAuthorization { status in
+                switch status {
+                case .authorized:
+                    // User granted permission - AppsFlyer will use IDFA for attribution
+                    print("ATT: Authorized - IDFA available for attribution")
+                case .denied:
+                    print("ATT: Denied - Limited attribution available")
+                case .notDetermined:
+                    print("ATT: Not determined")
+                case .restricted:
+                    print("ATT: Restricted")
+                @unknown default:
+                    print("ATT: Unknown status")
+                }
+                
+                // Start AppsFlyer regardless - it works with or without IDFA
+                // but attribution accuracy is better with IDFA
+                DispatchQueue.main.async {
+                    AppsFlyerLib.shared().start()
+                }
+            }
+        }
     }
     
     // MARK: - Event Tracking
