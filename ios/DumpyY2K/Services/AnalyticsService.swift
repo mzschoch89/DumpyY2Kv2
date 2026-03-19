@@ -47,9 +47,10 @@ class AnalyticsService: NSObject {
         AppsFlyerLib.shared().start()
     }
     
-    /// Request ATT permission - call this after a meaningful user action (not on launch)
-    /// AppsFlyer should already be started; this just enables IDFA if user grants permission
-    func requestTrackingPermission() {
+    /// Request ATT permission, THEN start AppsFlyer
+    /// This ensures we request permission BEFORE collecting any tracking data
+    /// Call this after a meaningful user action (not on launch)
+    func requestTrackingThenStartAppsFlyer() {
         // Small delay to ensure UI is settled
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             ATTrackingManager.requestTrackingAuthorization { status in
@@ -64,6 +65,11 @@ class AnalyticsService: NSObject {
                     print("ATT: Restricted")
                 @unknown default:
                     print("ATT: Unknown status")
+                }
+                
+                // Start AppsFlyer AFTER ATT decision (regardless of outcome)
+                DispatchQueue.main.async {
+                    AppsFlyerLib.shared().start()
                 }
             }
         }

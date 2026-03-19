@@ -11,10 +11,11 @@ struct ContentView: View {
         if !isAuthenticated {
             AuthView {
                 isAuthenticated = true
-                // Request ATT after user authenticates (meaningful moment)
+                // Request ATT after user authenticates, THEN start AppsFlyer
+                // This ensures permission is requested BEFORE any tracking data collection
                 if !hasRequestedATT {
                     hasRequestedATT = true
-                    AnalyticsService.shared.requestTrackingPermission()
+                    AnalyticsService.shared.requestTrackingThenStartAppsFlyer()
                 }
             }
         } else {
@@ -63,6 +64,11 @@ struct ContentView: View {
             let pink = UIColor(Y2K.hotPink)
             UITabBar.appearance().unselectedItemTintColor = pink
             viewModel.load()
+            
+            // For returning users who already went through ATT, just start AppsFlyer
+            if hasRequestedATT {
+                AnalyticsService.shared.startAppsFlyer()
+            }
         }
         .fullScreenCover(isPresented: $showWorkout) {
             ActiveWorkoutView(viewModel: viewModel)
